@@ -33,6 +33,7 @@ class ConsoleController extends AbstractController
 
         $input = new ArrayInput([
             'command' => 'make:controller',
+            'controller-class' => 'testController'
         ]);
 
         // You can use NullOutput() if you don't need the output
