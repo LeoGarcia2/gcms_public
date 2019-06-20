@@ -22,6 +22,16 @@ class ConsoleController extends AbstractController
             'controller_name' => 'ConsoleController',
         ]);
     }
+    /**
+     * @Route("/test", name="test")
+     */
+    public function test()
+    {
+        $filec = file_get_contents('../.env');
+        $filec = preg_replace('#DATABASE_URL=mysql://db_user:db_password@127.0.0.1:3306/db_name#', 'DATABASE_URL=mysql://test:test@127.0.0.1:3306/test', $filec);
+        file_put_contents('../.env', $filec);
+        return new Response($filec);
+    }
 
     /**
      * @Route("/console/test", name="consoletest")
