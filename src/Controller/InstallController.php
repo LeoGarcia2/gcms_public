@@ -41,18 +41,31 @@ class InstallController extends AbstractController
             }
             $cC->createDatabase($kernel);
 		    
-        	// //User creation
-        	// $user = new User();
-        	// $user->setUsername($_POST['username']);
-         //    $user->setPassword(
-         //        $passwordEncoder->encodePassword(
-         //            $user,
-         //            $_POST['password']
-         //        )
-         //    );
-         //    $entityManager->persist($user);
+        	//User creation
+        	$user = new User();
+        	$user->setUsername($_POST['username']);
+            $user->setPassword(
+                $passwordEncoder->encodePassword(
+                    $user,
+                    $_POST['password']
+                )
+            );
+            $entityManager->persist($user);
 
-         //    $entityManager->flush();
+            $entityManager->flush();
+
+            //Update site config
+            if(isset($_POST['sitename']) && $_POST['sitename'] != '' && isset($_POST['slogan']) && $_POST['slogan'] != ''){
+            	$siteConfig = file_get_contents('./assets/site_config/site_config.yml');
+		        $siteConfig = preg_replace('#MyAwesomeWebsite#', $_POST['sitename'], $siteConfig);
+		        $siteConfig = preg_replace('#The best website ever!#', $_POST['slogan'], $siteConfig);
+		        file_put_contents('./assets/site_config/site_config.yml', $siteConfig);
+            }
+
+            if(isset($_FILES['logo']) && isset($_FILES['favicon'])){
+            	move_uploaded_file($_FILES['logo']['tmp_name'], './assets/site_config/images/logo.png');
+            	move_uploaded_file($_FILES['favicon']['tmp_name'], './assets/site_config/images/favicon.png');
+            }
 
             return $this->redirectToRoute('app_login');
         }

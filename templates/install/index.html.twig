@@ -38,17 +38,17 @@
 			
 		<section>
 			<label for="dbUrl">Your database's URL(*) : </label>
-			<input type="text" name="dbUrl" id="dbUrl" value="mysql://db_user:db_password@127.0.0.1:3306/db_name" required>
+			<input type="text" name="dbUrl" id="dbUrl" value="mysql://db_user:db_password@127.0.0.1:3306/db_name" minlength="20" required>
 		</section>
 
 		<section>
 			<label for="username">Your Admin's username(*) : </label>
-			<input type="text" name="username" id="username" placeholder="AmazingUser" required>
+			<input type="text" name="username" id="username" placeholder="AmazingUser" minlength="3" required>
 		</section>
 
 		<section>
 			<label for="password">Your Admin's password(*) : </label>
-			<input type="text" name="password" id="password" required>
+			<input type="password" name="password" id="password" minlength="3" required>
 		</section>
 
 		<section>
