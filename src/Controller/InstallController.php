@@ -17,7 +17,7 @@ class InstallController extends AbstractController
     /**
      * @Route("/install", name="install")
      */
-    public function index()
+    public function index(Request $request)
     {
         if ($request->isMethod('POST')){
             //Database creation
@@ -40,12 +40,10 @@ class InstallController extends AbstractController
                 move_uploaded_file($_FILES['favicon']['tmp_name'], './assets/site_config/images/favicon.png');
             }
 
-            return $this->redirectToRoute('update_db', ['stage' => '1'])
+            return $this->redirectToRoute('update_db', ['stage' => '0']);
         }
 
-        return $this->render('install/index.html.twig', [
-            'controller_name' => 'InstallController',
-        ]);
+        return $this->render('install/index.html.twig');
     }
 
     /**
@@ -83,9 +81,10 @@ class InstallController extends AbstractController
     {
         if($stage == '0'){
             $cC->createDatabase($kernel);
-            return $this->redirectToRoute('update_db', ['stage' => '1'])
+            return $this->redirectToRoute('update_db', ['stage' => '1']);
         }else{
             $cC->migrateDatabase($kernel);
+            $cC->migrateDatabase2($kernel);
             return $this->render('install/register.html.twig');
         }
     }

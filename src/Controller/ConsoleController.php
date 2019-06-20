@@ -77,10 +77,15 @@ class ConsoleController extends AbstractController
 
         $output = new NullOutput();
         $application->run($input, $output);
+    }
+    public function migrateDatabase2(KernelInterface $kernel)
+    {
+        $application = new Application($kernel);
+        $application->setAutoExit(false);
 
         $input = new ArrayInput([
             'command' => 'doctrine:migrations:migrate',
-            '--message-limit' => ''
+            '--no-interaction' => ''
         ]);
 
         $output = new NullOutput();
