@@ -40,19 +40,7 @@ class InstallController extends AbstractController
 		        file_put_contents('../.env', $env);
             }
             $cC->createDatabase($kernel);
-		    
-        	//User creation
-        	$user = new User();
-        	$user->setUsername($_POST['username']);
-            $user->setPassword(
-                $passwordEncoder->encodePassword(
-                    $user,
-                    $_POST['password']
-                )
-            );
-            $entityManager->persist($user);
-
-            $entityManager->flush();
+            $cC->migrateDatabase($kernel);
 
             //Update site config
             if(isset($_POST['sitename']) && $_POST['sitename'] != '' && isset($_POST['slogan']) && $_POST['slogan'] != ''){
@@ -66,6 +54,19 @@ class InstallController extends AbstractController
             	move_uploaded_file($_FILES['logo']['tmp_name'], './assets/site_config/images/logo.png');
             	move_uploaded_file($_FILES['favicon']['tmp_name'], './assets/site_config/images/favicon.png');
             }
+		    
+        	//User creation
+        	$user = new User();
+        	$user->setUsername($_POST['username']);
+            $user->setPassword(
+                $passwordEncoder->encodePassword(
+                    $user,
+                    $_POST['password']
+                )
+            );
+            $entityManager->persist($user);
+
+            $entityManager->flush();
 
             return $this->redirectToRoute('app_login');
         }
