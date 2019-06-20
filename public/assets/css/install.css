@@ -1,0 +1,12 @@
+section:not(#wrapper){
+	display: grid;
+	grid-template-columns: 15% 70%;
+	grid-template-rows: auto;
+	grid-template-areas: "labels inputs";
+}
+button, input{
+	grid-area: inputs;
+}
+label{
+	grid-area: labels;
+}

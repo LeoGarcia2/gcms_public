@@ -1,0 +1,52 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Gcms - Installation{% endblock %}
+
+{% block stylesheets %}
+
+<link rel="stylesheet" href="{{ path('assets') }}/css/install.css">
+
+{% endblock %}
+
+{% block body %}
+
+<section id="wrapper">
+
+	<h1>Enter your site's data :</h1>
+
+	<form action="{{ path('install') }}" method="post" enctype="multipart/form-data">
+
+		<section>
+			<label for="sitename">Your site's name : </label>
+			<input type="text" name="sitename" id="sitename" placeholder="MyAwesomeWebsite">
+		</section>
+
+		<section>
+			<label for="slogan">Your site's slogan : </label>
+			<input type="text" name="slogan" id="slogan" placeholder="The best website ever!">
+		</section>
+
+		<section>
+			<label for="logo">Your site's logo : </label>
+			<input type="file" name="logo" id="logo">
+		</section>
+
+		<section>
+			<label for="favicon">Your site's favicon : </label>
+			<input type="file" name="favicon" id="favicon">
+		</section>
+			
+		<section>
+			<label for="dbUrl">Your database's URL : </label>
+			<input type="text" name="dbUrl" id="dbUrl" value="mysql://db_user:db_password@127.0.0.1:3306/db_name">
+		</section>
+
+		<section>
+			<button type="submit">I've set all of my data correctly!</button>
+		</section>
+		
+	</form>
+	
+</section>
+
+{% endblock %}
