@@ -1,0 +1,37 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Gcms - Installation{% endblock %}
+
+{% block stylesheets %}
+
+<link rel="stylesheet" href="{{ path('assets') }}/css/install.css">
+
+{% endblock %}
+
+{% block body %}
+
+<section id="wrapper">
+
+	<h1>Enter your Admin's data :</h1>
+
+	<form action="{{ path('app_register') }}" method="post">
+
+		<section>
+			<label for="username">Your Admin's username(*) : </label>
+			<input type="text" name="username" id="username" placeholder="AmazingUser" minlength="3" required>
+		</section>
+
+		<section>
+			<label for="password">Your Admin's password(*) : </label>
+			<input type="password" name="password" id="password" minlength="3" required>
+		</section>
+
+		<section>
+			<button type="submit">I've set all of my data correctly!</button>
+		</section>
+		
+	</form>
+	
+</section>
+
+{% endblock %}
