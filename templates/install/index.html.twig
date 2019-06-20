@@ -17,13 +17,13 @@
 	<form action="{{ path('app_register') }}" method="post" enctype="multipart/form-data">
 
 		<section>
-			<label for="sitename">Your site's name : </label>
-			<input type="text" name="sitename" id="sitename" placeholder="MyAwesomeWebsite">
+			<label for="sitename">Your site's name(*) : </label>
+			<input type="text" name="sitename" id="sitename" placeholder="MyAwesomeWebsite" required>
 		</section>
 
 		<section>
-			<label for="slogan">Your site's slogan : </label>
-			<input type="text" name="slogan" id="slogan" placeholder="The best website ever!">
+			<label for="slogan">Your site's slogan(*) : </label>
+			<input type="text" name="slogan" id="slogan" placeholder="The best website ever!" required>
 		</section>
 
 		<section>
@@ -37,18 +37,18 @@
 		</section>
 			
 		<section>
-			<label for="dbUrl">Your database's URL : </label>
-			<input type="text" name="dbUrl" id="dbUrl" value="mysql://db_user:db_password@127.0.0.1:3306/db_name">
+			<label for="dbUrl">Your database's URL(*) : </label>
+			<input type="text" name="dbUrl" id="dbUrl" value="mysql://db_user:db_password@127.0.0.1:3306/db_name" required>
 		</section>
 
 		<section>
-			<label for="username">Your Admin's username : </label>
-			<input type="text" name="username" id="username" placeholder="AmazingUser">
+			<label for="username">Your Admin's username(*) : </label>
+			<input type="text" name="username" id="username" placeholder="AmazingUser" required>
 		</section>
 
 		<section>
-			<label for="password">Your Admin's password : </label>
-			<input type="text" name="password" id="password">
+			<label for="password">Your Admin's password(*) : </label>
+			<input type="text" name="password" id="password" required>
 		</section>
 
 		<section>

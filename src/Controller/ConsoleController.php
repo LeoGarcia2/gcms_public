@@ -7,9 +7,9 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Console\Application;
 use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Output\BufferedOutput;
+use Symfony\Component\Console\Output\NullOutput;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\KernelInterface;
-
 
 class ConsoleController extends AbstractController
 {
@@ -27,10 +27,7 @@ class ConsoleController extends AbstractController
      */
     public function test()
     {
-        $filec = file_get_contents('../.env');
-        $filec = preg_replace('#DATABASE_URL=mysql://db_user:db_password@127.0.0.1:3306/db_name#', 'DATABASE_URL=mysql://test:test@127.0.0.1:3306/test', $filec);
-        file_put_contents('../.env', $filec);
-        return new Response($filec);
+        return new Response('ok');
     }
 
     /**
@@ -55,5 +52,18 @@ class ConsoleController extends AbstractController
 
         // return new Response(""), if you used NullOutput()
         return new Response($content);
+    }
+
+    public function createDatabase(KernelInterface $kernel)
+    {
+        $application = new Application($kernel);
+        $application->setAutoExit(false);
+
+        $input = new ArrayInput([
+            'command' => 'doctrine:database:create'
+        ]);
+
+        $output = new NullOutput();
+        $application->run($input, $output);
     }
 }
