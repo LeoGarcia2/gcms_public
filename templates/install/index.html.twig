@@ -14,7 +14,7 @@
 
 	<h1>Enter your site's data :</h1>
 
-	<form action="{{ path('install') }}" method="post" enctype="multipart/form-data">
+	<form action="{{ path('app_register') }}" method="post" enctype="multipart/form-data">
 
 		<section>
 			<label for="sitename">Your site's name : </label>
@@ -39,6 +39,16 @@
 		<section>
 			<label for="dbUrl">Your database's URL : </label>
 			<input type="text" name="dbUrl" id="dbUrl" value="mysql://db_user:db_password@127.0.0.1:3306/db_name">
+		</section>
+
+		<section>
+			<label for="username">Your Admin's username : </label>
+			<input type="text" name="username" id="username" placeholder="AmazingUser">
+		</section>
+
+		<section>
+			<label for="password">Your Admin's password : </label>
+			<input type="text" name="password" id="password">
 		</section>
 
 		<section>
