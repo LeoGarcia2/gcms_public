@@ -1,20 +1,68 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Hello AdminController!{% endblock %}
+{% block title %}Gcms - Admin{% endblock %}
+
+{% block stylesheets %}
+
+<link rel="stylesheet" href="{{ path('assets') }}/css/admin.css">
+
+{% endblock %}
 
 {% block body %}
-<style>
-    .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
-    .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
-</style>
 
-<div class="example-wrapper">
-    <h1>Hello {{ controller_name }}! ✅</h1>
+<section id="wrapper">
 
-    This friendly message is coming from:
-    <ul>
-        <li>Your controller at <code><a href="{{ 'C:/wamp64/www/Gcms/src/Controller/AdminController.php'|file_link(0) }}">src/Controller/AdminController.php</a></code></li>
-        <li>Your template at <code><a href="{{ 'C:/wamp64/www/Gcms/templates/admin/index.html.twig'|file_link(0) }}">templates/admin/index.html.twig</a></code></li>
-    </ul>
-</div>
+	<header>
+
+		<nav>
+
+			<a id="gcms_logo" href="{{ path('admin_home') }}">
+				<img height="60" src="{{ path('assets') }}/site_config/images/logo.png" alt="Logo">
+			</a>
+
+			<section id="gcms_bar">
+				<p>
+					Username
+				</p>
+				<p>
+					<a href="#">Go</a>
+				</p>
+			</section>
+
+		</nav>
+
+	</header>
+
+	<main>
+		
+		<section id="gcms_menu">
+			
+			<nav>
+				
+				<a href="#">Pages</a>
+				<a href="#">Entries</a>
+				<a href="#">Components</a>
+				<hr>
+				<a href="#">Config</a>
+				<a href="#">Files</a>
+				<a href="#">Themes</a>
+				<a href="#">Extensions</a>
+
+			</nav>
+
+		</section>
+
+		<section id="gcms_page">
+			page
+			{% block gcms_page %}{% endblock %}
+		</section>
+
+	</main>	
+
+</section>
+
+<footer>
+	<p>&copy; Léo Garcia {{ 'now' | date('Y') }}</p>
+</footer>
+
 {% endblock %}

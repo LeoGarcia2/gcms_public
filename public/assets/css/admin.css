@@ -1,0 +1,78 @@
+*{
+	padding: 0;
+	margin: 0;
+	box-sizing: border-box;
+}
+section#wrapper{
+	display: grid;
+	grid-template-columns: 100%;
+	grid-template-rows: 60px auto;
+	grid-template-areas: 
+							"header"
+							"main";	
+}
+section#wrapper header{
+	grid-area: header;
+}
+section#wrapper header nav{
+	display: grid;
+	grid-template-columns: 15% 85%;
+	grid-template-rows: 60px;
+	grid-template-areas: "logo bar";
+}
+section#wrapper header nav a#gcms_logo{
+	display: block;
+	background-color: red;
+	grid-area: logo;
+}
+section#wrapper header nav section#gcms_bar{
+	grid-area: bar;
+
+	display: grid;
+	grid-template-columns: 30% 40% 30%;
+	grid-template-rows: auto;
+	grid-template-areas: "account blank site";
+}
+section#wrapper header nav section#gcms_bar p:first-child{
+	background-color: green;
+	grid-area: account;
+}
+section#wrapper header nav section#gcms_bar p:last-child{
+	background-color: yellow;
+	grid-area: site;
+}
+section#wrapper main{
+	grid-area: main;
+
+	display: grid;
+	grid-template-columns: 15% 85%;
+	grid-template-rows: auto;
+	grid-template-areas: "menu page";
+}
+section#wrapper main section#gcms_menu{
+	background-color: orange;
+	grid-area: menu;
+}
+section#wrapper main section#gcms_page{
+	background-color: lightgreen;
+	grid-area: page;
+}
+section#wrapper main section#gcms_menu nav a{
+	display: flex;
+	align-items: center;
+	justify-content: center;
+
+	text-decoration: none;
+	padding: 10px;
+	border: 1px solid;
+	height: 12vh;
+}
+section#wrapper main section#gcms_menu nav a:hover{
+	background-color: purple;
+	color: white;
+}
+footer{
+	display: flex;
+	justify-content: center;
+	align-items: flex-end;
+}

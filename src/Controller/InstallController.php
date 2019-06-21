@@ -28,11 +28,12 @@ class InstallController extends AbstractController
             }
 
             //Update site config
-            if(isset($_POST['sitename']) && $_POST['sitename'] != '' && isset($_POST['slogan']) && $_POST['slogan'] != ''){
-                $siteConfig = file_get_contents('./assets/site_config/site_config.yml');
+            if(isset($_POST['sitename']) && $_POST['sitename'] != '' && isset($_POST['slogan']) && $_POST['slogan'] != '' && isset($_POST['locale']) && $_POST['locale'] != ''){
+                $siteConfig = file_get_contents('../config/packages/twig.yaml');
                 $siteConfig = preg_replace('#MyAwesomeWebsite#', $_POST['sitename'], $siteConfig);
                 $siteConfig = preg_replace('#The best website ever!#', $_POST['slogan'], $siteConfig);
-                file_put_contents('./assets/site_config/site_config.yml', $siteConfig);
+                $siteConfig = preg_replace('#localeBase#', $_POST['locale'], $siteConfig);
+                file_put_contents('../config/packages/twig.yaml', $siteConfig);
             }
 
             if(isset($_FILES['logo']) && isset($_FILES['favicon'])){

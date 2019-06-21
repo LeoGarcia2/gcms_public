@@ -13,25 +13,9 @@ use Symfony\Component\HttpKernel\KernelInterface;
 
 class ConsoleController extends AbstractController
 {
-    /**
-     * @Route("/console", name="console")
-     */
-    public function index()
-    {
-        return $this->render('console/index.html.twig', [
-            'controller_name' => 'ConsoleController',
-        ]);
-    }
-    /**
-     * @Route("/test", name="test")
-     */
-    public function test()
-    {
-        return new Response('ok');
-    }
 
     /**
-     * @Route("/console/test", name="consoletest")
+     * @Route("/console", name="console")
      */
     public function consoletest(KernelInterface $kernel)
     {
@@ -39,8 +23,7 @@ class ConsoleController extends AbstractController
         $application->setAutoExit(false);
 
         $input = new ArrayInput([
-            'command' => 'make:controller',
-            'controller-class' => 'testController'
+            'command' => 'debug:router'
         ]);
 
         // You can use NullOutput() if you don't need the output
