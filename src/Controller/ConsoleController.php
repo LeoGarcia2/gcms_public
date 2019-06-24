@@ -82,7 +82,39 @@ class ConsoleController extends AbstractController
 
         $input = new ArrayInput([
             'command' => 'make:entity',
-            'name' => $entity_name
+            'name' => $entity_name,
+            '--no-interaction' => ''
+        ]);
+
+        $output = new NullOutput();
+        $application->run($input, $output);
+    }
+
+    public function regenerateEntity(KernelInterface $kernel, $entity_name)
+    {
+        $application = new Application($kernel);
+        $application->setAutoExit(false);
+
+        $input = new ArrayInput([
+            'command' => 'make:entity',
+            'name' => 'App\Entity\\'.$entity_name,
+            '--regenerate' => true,
+            '--overwrite' => true,
+        ]);
+
+        $output = new NullOutput();
+        $application->run($input, $output);
+    }
+
+    public function createEntityForm(KernelInterface $kernel, $entity_name)
+    {
+        $application = new Application($kernel);
+        $application->setAutoExit(false);
+
+        $input = new ArrayInput([
+            'command' => 'make:form',
+            'name' => $entity_name,
+            'bound-class' => $entity_name
         ]);
 
         $output = new NullOutput();

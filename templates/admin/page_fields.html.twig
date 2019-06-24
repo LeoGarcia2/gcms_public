@@ -1,0 +1,183 @@
+{% extends 'admin/layout.html.twig' %}
+
+{% block gcms_page %}
+
+<h1>Set the page's fields</h1>
+
+<input type="text" id="field_name" placeholder="Field's name">
+
+<select id="field_type">
+	
+	<option value="string" selected>String</option>
+	<option value="text">Text</option>
+	<option value="boolean">Boolean</option>
+	<option value="integer">Integer</option>
+	<option value="float">Float</option>
+	<option value="datetime">Datetime</option>
+	<option value="file">Image</option>
+
+</select>
+
+<select id="field_nullable">
+	
+	<option value="true">Nullable</option>
+	<option value="false">Not nullable</option>
+
+</select>
+
+<label class="string_field" for="string_length">String's length</label>
+<input class="string_field" id="string_length" type="number" min="1" max="255" value="255">
+
+<button id="field_add">Add field</button>
+<button id="submit_page">Submit page</button>
+
+<table>
+	
+	<thead>
+		<tr>
+			<th>Id</th>
+			<th>Name</th>
+			<th>Type</th>
+			<th>Options</th>
+			<th>Remove</th>
+		</tr>			
+	</thead>
+	<tbody>
+		
+	</tbody>
+
+</table>
+
+<form action="{{ path('fields_page', { page: pageName }) }}" method="post">
+	<textarea id="pageArea" name="pageArea" style="display: none;">{{page}}</textarea>
+	<button id="addPage" type="submit" style="opacity: 0;"></button>
+</form>	
+
+{% endblock %}
+
+{% block javascripts %}
+
+<script>
+
+	let field_id = 0;
+	let fields = [];
+	let contains_image = false;
+
+	$('#field_type').on('change', function(){
+
+		if($('#field_type').val() == 'string'){
+
+			$('.string_field').show();
+
+		}else{
+
+			$('.string_field').hide();
+
+		}
+
+	});
+
+	$('#field_add').on('click', function(){
+
+		let name = $('#field_name').val();
+
+		fields.forEach(function(value, key){
+			if(value.name == name){
+				name = name+'Bis';
+			}
+		});
+
+		if(name != ''){
+
+			let type = $('#field_type').val();
+			let nullable = $('#field_nullable').val();
+			let length = null;
+
+			if(type == 'string'){
+
+				length = $('#string_length').val();
+
+			}
+
+			let options = 'nullable='+nullable;
+
+			if(length != null){
+
+				options += ', length='+length;
+
+			}
+
+			fields[field_id] = { name: name, type: type, options: options }
+			field_id++;
+
+			updateDisplay();
+
+		}
+			
+	});
+
+	$('tbody').on('click', '.remove', function(event){
+
+		event.preventDefault();
+		let id = $(this).attr('data-id');
+		delete fields[id];
+		updateDisplay();
+
+	});
+
+	$('#submit_page').on('click', function(){
+
+		let phpCode = $('#pageArea').val();
+		let content = '';
+
+		fields.forEach(function(value){
+
+			let element = '\n    /**\n     * @ORM\\Column(type="'+value.type+'", '+value.options+')';
+			if(value.type == 'file'){
+				element = element+'\n     * @Assert\\Image()';
+			}
+			element = element+'\n     */\n    private $'+value.name+';\n';
+			content = content+element;
+
+		});
+		
+		if(contains_image){
+
+			phpCode = phpCode.replace('use Doctrine\\ORM\\Mapping as ORM;', 'use Doctrine\\ORM\\Mapping as ORM;\nuse Symfony\\Component\\Validator\\Constraints as Assert;\nuse Symfony\\Component\\HttpFoundation\\File\\File;');
+
+		}
+
+		phpCode = phpCode.replace('private $id;', 'private $id;\n'+content);
+		$('#pageArea').val(phpCode);
+
+		$('#addPage').click();
+
+	});
+
+	function updateDisplay(){
+
+		contains_image = false;
+
+		$('tbody').html('');
+
+		fields.forEach(function(value, key){
+
+			if(value.type == 'file'){
+				contains_image = true;
+			}
+
+			$('tbody').html($('tbody').html()+
+				'<tr><td>'+key+
+				'</td><td>'+value.name+
+				'</td><td>'+value.type+
+				'</td><td>'+value.options+
+				'</td><td><a class="remove" data-id="'+
+				key+'" href="#">Remove</a></td></tr>');
+
+		});
+
+	}
+
+</script>
+
+{% endblock %}

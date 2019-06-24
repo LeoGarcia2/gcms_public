@@ -180,3 +180,10 @@ section#wrapper main section#gcms_page form#listing section.page p:nth-child(4){
 section#wrapper main section#gcms_page form#listing section.page p:nth-child(5){
 	grid-area: state;
 }
+section#wrapper main section#gcms_page table, thead, tbody, tr, th, td{
+	border: 1px solid #000;
+	border-collapse: collapse;
+}
+section#wrapper main section#gcms_page th, td{
+	padding: 20px;
+}
