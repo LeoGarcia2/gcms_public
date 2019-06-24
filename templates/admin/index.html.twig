@@ -1,68 +1,10 @@
-{% extends 'base.html.twig' %}
+{% extends 'admin/layout.html.twig' %}
 
-{% block title %}Gcms - Admin{% endblock %}
+{% block gcms_page %}
 
-{% block stylesheets %}
-
-<link rel="stylesheet" href="{{ path('assets') }}/css/admin.css">
-
-{% endblock %}
-
-{% block body %}
-
-<section id="wrapper">
-
-	<header>
-
-		<nav>
-
-			<a id="gcms_logo" href="{{ path('admin_home') }}">
-				<img height="60" src="{{ path('assets') }}/site_config/images/logo.png" alt="Logo">
-			</a>
-
-			<section id="gcms_bar">
-				<p>
-					Username
-				</p>
-				<p>
-					<a href="#">Go</a>
-				</p>
-			</section>
-
-		</nav>
-
-	</header>
-
-	<main>
-		
-		<section id="gcms_menu">
-			
-			<nav>
-				
-				<a href="#">Pages</a>
-				<a href="#">Entries</a>
-				<a href="#">Components</a>
-				<hr>
-				<a href="#">Config</a>
-				<a href="#">Files</a>
-				<a href="#">Themes</a>
-				<a href="#">Extensions</a>
-
-			</nav>
-
-		</section>
-
-		<section id="gcms_page">
-			page
-			{% block gcms_page %}{% endblock %}
-		</section>
-
-	</main>	
-
-</section>
-
-<footer>
-	<p>&copy; Léo Garcia {{ 'now' | date('Y') }}</p>
-</footer>
+<h1>Welcome to GarciaCMS!</h1>
+<h2>Built on Symfony 4.</h2>
+<hr>
+<p>See the <a href="#">doc</a> to get started ! Everything in the backend is Symfony 4 so if you're a developer (and I hope you're one because this tool is made for them) you can do what you want directly within the code.</p>
 
 {% endblock %}

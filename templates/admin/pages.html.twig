@@ -1,0 +1,43 @@
+{% extends 'admin/layout.html.twig' %}
+
+{% block gcms_page %}
+
+<h1>Pages</h1>
+
+<form id="new" method="post" action="{{ path('admin_new_page') }}">
+
+	<input type="text" name="entity_name" placeholder="Page's name" required>
+
+	<button type="submit" title="Create new page"><i class="material-icons">fiber_new</i></button>
+
+</form>
+
+<hr>
+
+<form id="listing" method="post" action="{{ path('admin_pages') }}">
+
+	<section id="controls">
+		<input type="radio" name="controls" id="publish" value="publish">
+		<label for="publish">Publish</label>
+		<input type="radio" name="controls" id="unpublish" value="unpublish">
+		<label for="unpublish">Unpublish</label>
+		<input type="radio" name="controls" id="delete" value="delete">
+		<label for="delete">Delete</label>
+		<button type="submit">Execute</button>
+	</section>
+
+	<hr>
+	
+	<section class="page">
+
+		<p><input type="checkbox" name="page-id" id="page-id"></p>
+		<p><a href="#">PageName</a></p>
+		<p>Created by Username</p>
+		<p>At 00/00/0000</p>
+		<p>Published <i class="material-icons">indeterminate_check_box</i></p>
+		
+	</section>
+
+</form>
+
+{% endblock %}

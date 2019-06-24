@@ -74,4 +74,18 @@ class ConsoleController extends AbstractController
         $output = new NullOutput();
         $application->run($input, $output);
     }
+
+    public function createEntity(KernelInterface $kernel, $entity_name)
+    {
+        $application = new Application($kernel);
+        $application->setAutoExit(false);
+
+        $input = new ArrayInput([
+            'command' => 'make:entity',
+            'name' => $entity_name
+        ]);
+
+        $output = new NullOutput();
+        $application->run($input, $output);
+    }
 }

@@ -2,6 +2,25 @@
 	padding: 0;
 	margin: 0;
 	box-sizing: border-box;
+	font-size: 24px;
+	font-family: 'Lato', sans-serif;
+}
+html{
+	height: 100%;
+}
+body{
+	min-height: 100%;
+	display: flex;
+	flex-direction: column;
+}
+h1, h2{
+	text-align: center;
+}
+h1{
+	font-size: 48px;
+}
+a{
+	cursor: pointer;
 }
 section#wrapper{
 	display: grid;
@@ -13,6 +32,7 @@ section#wrapper{
 }
 section#wrapper header{
 	grid-area: header;
+	background-color: #ddd;
 }
 section#wrapper header nav{
 	display: grid;
@@ -21,25 +41,56 @@ section#wrapper header nav{
 	grid-template-areas: "logo bar";
 }
 section#wrapper header nav a#gcms_logo{
-	display: block;
-	background-color: red;
+	display: flex;
+	align-items: center;
 	grid-area: logo;
+	border-bottom: 2px solid #000;
+	border-right: 2px solid #000;
+	font-weight: bold;
+	text-decoration: none;
+}
+section#wrapper header nav a#gcms_logo > *{
+	margin-left: 10px;
+	color: #000;
 }
 section#wrapper header nav section#gcms_bar{
 	grid-area: bar;
 
 	display: grid;
-	grid-template-columns: 30% 40% 30%;
+	grid-template-columns: 10% 80% 10%;
 	grid-template-rows: auto;
 	grid-template-areas: "account blank site";
+	border-bottom: 2px solid #000;
 }
 section#wrapper header nav section#gcms_bar p:first-child{
-	background-color: green;
 	grid-area: account;
+
+	display: flex;
+	align-items: center;
+}
+section#wrapper header nav section#gcms_bar p:first-child > *{
+	display: block;
+	margin-left: 10px;
+}
+section#wrapper header nav section#gcms_bar p:first-child > i{
+	font-size: 40px;
+	background-color: #fff;
+	border-radius: 100%;
 }
 section#wrapper header nav section#gcms_bar p:last-child{
-	background-color: yellow;
 	grid-area: site;
+
+	display: flex;
+	align-items: center;
+	justify-content: flex-end;
+}
+section#wrapper header nav section#gcms_bar p:last-child > a{
+	display: block;
+	margin-right: 10px;
+	color: #000;
+}
+section#wrapper header nav section#gcms_bar p:last-child > a > i{
+	font-size: 40px;
 }
 section#wrapper main{
 	grid-area: main;
@@ -50,29 +101,82 @@ section#wrapper main{
 	grid-template-areas: "menu page";
 }
 section#wrapper main section#gcms_menu{
-	background-color: orange;
+	background-color: #ddd;
 	grid-area: menu;
+	border-right: 2px solid #000;
+	border-bottom: 2px solid #000;
 }
 section#wrapper main section#gcms_page{
-	background-color: lightgreen;
+	background-color: #fff;
 	grid-area: page;
+	padding: 20px;
+	border-bottom: 2px solid #000;
 }
 section#wrapper main section#gcms_menu nav a{
 	display: flex;
 	align-items: center;
-	justify-content: center;
 
-	text-decoration: none;
 	padding: 10px;
-	border: 1px solid;
-	height: 12vh;
+	height: 60px;
+	color: #000;
+	text-decoration: none;
 }
 section#wrapper main section#gcms_menu nav a:hover{
-	background-color: purple;
-	color: white;
+	background-color: #000;
+	color: #ddd;
 }
 footer{
 	display: flex;
 	justify-content: center;
-	align-items: flex-end;
+	align-items: center;
+	margin-top: auto;
+	height: 60px;
+}
+
+section#wrapper main section#gcms_page form#new{
+	display: flex;
+	align-items: center;
+}
+section#wrapper main section#gcms_page form#new button{
+	border: none;
+	background: none;
+	cursor: pointer;
+}
+section#wrapper main section#gcms_page form#new button i{
+	font-size: 48px;
+}
+section#wrapper main section#gcms_page form#listing section#controls{
+	display: flex;
+	align-items: center;
+}
+section#wrapper main section#gcms_page form#listing section#controls label{
+	margin: 0 10px;
+}
+section#wrapper main section#gcms_page form#listing section#controls button{
+	margin-left: auto;
+}
+section#wrapper main section#gcms_page form#listing section.page{
+	display: grid;
+	grid-template-columns: 5% 15% 25% 15% 25% 15%;
+	grid-template-rows: auto;
+	grid-template-areas: "check name creator creation_date blank state";
+}
+section#wrapper main section#gcms_page form#listing section.page p{
+	display: flex;
+	align-items: center;
+}
+section#wrapper main section#gcms_page form#listing section.page p:nth-child(1){
+	grid-area: check;
+}
+section#wrapper main section#gcms_page form#listing section.page p:nth-child(2){
+	grid-area: name;
+}
+section#wrapper main section#gcms_page form#listing section.page p:nth-child(3){
+	grid-area: creator;
+}
+section#wrapper main section#gcms_page form#listing section.page p:nth-child(4){
+	grid-area: creation_date;
+}
+section#wrapper main section#gcms_page form#listing section.page p:nth-child(5){
+	grid-area: state;
 }

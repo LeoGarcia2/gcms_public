@@ -1,0 +1,77 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}GCMS - Admin{% endblock %}
+
+{% block stylesheets %}
+
+<link rel="stylesheet" href="{{ path('assets') }}/css/admin.css">
+<link href="https://fonts.googleapis.com/css?family=Lato:400,700&display=swap" rel="stylesheet"> 
+
+{% endblock %}
+
+{% block body %}
+
+<section id="wrapper">
+
+	<header>
+
+		<nav>
+
+			<a id="gcms_logo" href="{{ path('admin_home') }}">
+				<img height="40" src="{{ path('assets') }}/site_config/images/logo.png" alt="Logo">
+				<span>GCMS</span>
+			</a>
+
+			<section id="gcms_bar">
+
+				<p>
+					<i class="material-icons">account_circle</i>
+					<span>Username</span>
+				</p>
+
+				<p>
+					<a href="#" title="Open the website"><i class="material-icons">open_in_new</i></a>
+				</p>
+
+			</section>
+
+		</nav>
+
+	</header>
+
+	<main>
+		
+		<section id="gcms_menu">
+			
+			<nav>
+				
+				<a href="{{ path('admin_pages') }}">Pages</a>
+				<a href="#">Entries</a>
+				<a href="#">Components</a>
+				<hr>
+				<a href="#">Config</a>
+				<a href="#">Files</a>
+				<a href="#">Themes</a>
+				<a href="#">Extensions</a>
+
+			</nav>
+
+		</section>
+
+		<section id="gcms_page">
+
+			{% block gcms_page %}{% endblock %}
+
+		</section>
+
+	</main>	
+
+</section>
+
+<footer>
+
+	<p>&copy; Léo Garcia {{ 'now' | date('Y') }}</p>
+	
+</footer>
+
+{% endblock %}
