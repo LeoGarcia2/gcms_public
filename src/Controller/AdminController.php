@@ -72,7 +72,7 @@ class AdminController extends AbstractController
             $template = preg_replace('#fieldsHere#', $pageFields, $template);
             file_put_contents('../templates/theme/pages/'.strtolower($pageName).'.html.twig', $template);
 
-            $route = file_get_contents('../src/Controller/gcms_default_route.php');
+            $route = file_get_contents('../src/Controller/gcms_default_route');
             $pageController = file_get_contents('../src/Controller/PageController.php');
             $route = preg_replace('#pagenamelowercase#', strtolower($pageName), $route);
             $route = preg_replace('#pagenameuppercase#', ucfirst($pageName), $route);
