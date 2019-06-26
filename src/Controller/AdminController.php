@@ -64,7 +64,7 @@ class AdminController extends AbstractController
     		$cC->createEntityForm($kernel, $pageName);
             $cC->fullMigration($kernel);
 
-            //générer template et route
+            //générer template et route dans PageController
 
             $formFile = file_get_contents('../src/Form/'.$pageName.'Type.php');
             $formFile = preg_replace("#'data_class' => ".$pageName."::class,#", "'data_class' => ".$pageName."::class,\n            'allow_extra_fields' => true", $formFile);
@@ -112,7 +112,7 @@ class AdminController extends AbstractController
             return $this->redirectToRoute('admin_pages');
         }
 
-        return $this->render('page/form.html.twig', [
+        return $this->render('admin/form.html.twig', [
             'form' => $form->createView(),
         ]);
     }
@@ -137,7 +137,7 @@ class AdminController extends AbstractController
             unset($entity[$oldName]);
         }
 
-        return $this->render('page/page.html.twig', [
+        return $this->render('admin/page.html.twig', [
             'pageName' => $page,
             'entity' => $entity,
         ]);
