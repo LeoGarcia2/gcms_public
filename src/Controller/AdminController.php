@@ -61,8 +61,9 @@ class AdminController extends AbstractController
 
     		$cC->regenerateEntity($kernel, $pageName);
     		$cC->createEntityForm($kernel, $pageName);
+            $cC->fullMigration($kernel);
 
-    		return $this->redirectToRoute('admin_pages');
+    		return $this->redirectToRoute('generic_form', [ 'page' => $pageName ]);
     	}
 
     	$page = file_get_contents('../src/Entity/'.$pageName.'.php');

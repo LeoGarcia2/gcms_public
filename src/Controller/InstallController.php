@@ -84,8 +84,7 @@ class InstallController extends AbstractController
             $cC->createDatabase($kernel);
             return $this->redirectToRoute('update_db', ['stage' => '1']);
         }else{
-            $cC->migrateDatabase($kernel);
-            $cC->migrateDatabase2($kernel);
+            $cC->fullMigration($kernel);
             return $this->render('install/register.html.twig');
         }
     }

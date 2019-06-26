@@ -75,6 +75,11 @@ class ConsoleController extends AbstractController
         $application->run($input, $output);
     }
 
+    public function fullMigration(KernelInterface $kernel){
+        $this->migrateDatabase($kernel);
+        $this->migrateDatabase2($kernel);
+    }
+
     public function createEntity(KernelInterface $kernel, $entity_name)
     {
         $application = new Application($kernel);
