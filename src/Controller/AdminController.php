@@ -67,7 +67,7 @@ class AdminController extends AbstractController
             $template = file_get_contents('../templates/theme/pages/gcms_default.html.twig');
             $pageFields = '';
             foreach($_POST['pageFields'] as $field){
-                $pageFields = "<section>{{ ".$field." }}</section>\n";
+                $pageFields .= "<section>{{ page.".$field." }}</section>\n    ";
             }
             $template = preg_replace('#fieldsHere#', $pageFields, $template);
             file_put_contents('../templates/theme/pages/'.strtolower($pageName).'.html.twig', $template);
@@ -76,7 +76,9 @@ class AdminController extends AbstractController
             $pageController = file_get_contents('../src/Controller/PageController.php');
             $route = preg_replace('#pagenamelowercase#', strtolower($pageName), $route);
             $route = preg_replace('#pagenameuppercase#', ucfirst($pageName), $route);
-            $pageController = preg_replace("#extends AbstractController\n{#", "extends AbstractController\n{".$route, $pageController);
+            $pageController = preg_replace("#AbstractController
+{#", "AbstractController
+{".$route, $pageController);
             file_put_contents('../src/Controller/PageController.php', $pageController);
 
             $formFile = file_get_contents('../src/Form/'.$pageName.'Type.php');
