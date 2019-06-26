@@ -49,6 +49,7 @@
 </table>
 
 <form action="{{ path('fields_page', { page: pageName }) }}" method="post">
+	<select id="pageFields" name="pageFields[]" style="display: none;" multiple></select>
 	<textarea id="pageArea" name="pageArea" style="display: none;">{{page}}</textarea>
 	<button id="addPage" type="submit" style="opacity: 0;"></button>
 </form>	
@@ -132,6 +133,14 @@
 		let imageType = '';
 
 		fields.forEach(function(value){
+
+			let nameArray = value.name.split('#[_-]#');
+			let nameForTemplate = nameArray[0];
+			for(let i = 1; i < nameArray.length; i++){
+				nameForTemplate += nameArray[i].charAt(0).toUpperCase() + nameArray[i].slice(1);
+			}
+
+			$('#pageFields').append('<option value="'+nameForTemplate+'" selected>'+nameForTemplate+'</option>');
 
 			if(value.type == 'image'){
 				value.type = 'string';

@@ -64,7 +64,20 @@ class AdminController extends AbstractController
     		$cC->createEntityForm($kernel, $pageName);
             $cC->fullMigration($kernel);
 
-            //générer template et route dans PageController
+            $template = file_get_contents('../templates/theme/pages/gcms_default.html.twig');
+            $pageFields = '';
+            foreach($_POST['pageFields'] as $field){
+                $pageFields = "<section>{{ ".$field." }}</section>\n";
+            }
+            $template = preg_replace('#fieldsHere#', $pageFields, $template);
+            file_put_contents('../templates/theme/pages/'.strtolower($pageName).'.html.twig', $template);
+
+            $route = file_get_contents('../src/Controller/gcms_default_route.php');
+            $pageController = file_get_contents('../src/Controller/PageController.php');
+            $route = preg_replace('#pagenamelowercase#', strtolower($pageName), $route);
+            $route = preg_replace('#pagenameuppercase#', ucfirst($pageName), $route);
+            $pageController = preg_replace("#extends AbstractController\n{#", "extends AbstractController\n{".$route, $pageController);
+            file_put_contents('../src/Controller/PageController.php', $pageController);
 
             $formFile = file_get_contents('../src/Form/'.$pageName.'Type.php');
             $formFile = preg_replace("#'data_class' => ".$pageName."::class,#", "'data_class' => ".$pageName."::class,\n            'allow_extra_fields' => true", $formFile);
