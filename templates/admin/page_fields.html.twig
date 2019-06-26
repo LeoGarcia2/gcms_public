@@ -134,7 +134,7 @@
 
 		fields.forEach(function(value){
 
-			let nameArray = value.name.split('#[_-]#');
+			let nameArray = value.name.split('_').join('-').split('-');
 			let nameForTemplate = nameArray[0];
 			for(let i = 1; i < nameArray.length; i++){
 				nameForTemplate += nameArray[i].charAt(0).toUpperCase() + nameArray[i].slice(1);
