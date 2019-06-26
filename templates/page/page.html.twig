@@ -1,0 +1,13 @@
+{% extends 'admin/layout.html.twig' %}
+
+{% block gcms_page %}
+
+	<h1>Data in {{ pageName }}</h1>
+
+	{% for name, field in entity %}
+
+	<section><b>{{ name }}</b> : {{ field }}</section>
+
+	{% endfor %}
+
+{% endblock %}

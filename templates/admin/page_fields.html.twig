@@ -14,7 +14,7 @@
 	<option value="integer">Integer</option>
 	<option value="float">Float</option>
 	<option value="datetime">Datetime</option>
-	<option value="file">Image</option>
+	<option value="image">Image</option>
 
 </select>
 
@@ -129,12 +129,20 @@
 
 		let phpCode = $('#pageArea').val();
 		let content = '';
+		let imageType = '';
 
 		fields.forEach(function(value){
 
+			if(value.type == 'image'){
+				value.type = 'string';
+				imageType = 'image';
+			}
+
 			let element = '\n    /**\n     * @ORM\\Column(type="'+value.type+'", '+value.options+')';
-			if(value.type == 'file'){
+
+			if(imageType == 'image'){
 				element = element+'\n     * @Assert\\Image()';
+				imageType = '';
 			}
 			element = element+'\n     */\n    private $'+value.name+';\n';
 			content = content+element;
@@ -143,7 +151,7 @@
 		
 		if(contains_image){
 
-			phpCode = phpCode.replace('use Doctrine\\ORM\\Mapping as ORM;', 'use Doctrine\\ORM\\Mapping as ORM;\nuse Symfony\\Component\\Validator\\Constraints as Assert;\nuse Symfony\\Component\\HttpFoundation\\File\\File;');
+			phpCode = phpCode.replace('use Doctrine\\ORM\\Mapping as ORM;', 'use Doctrine\\ORM\\Mapping as ORM;\nuse Symfony\\Component\\Validator\\Constraints as Assert;');
 
 		}
 

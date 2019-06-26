@@ -157,9 +157,9 @@ section#wrapper main section#gcms_page form#listing section#controls button{
 }
 section#wrapper main section#gcms_page form#listing section.page{
 	display: grid;
-	grid-template-columns: 5% 15% 25% 15% 25% 15%;
+	grid-template-columns: 5% 15% 10% 25% 15% 15% 15%;
 	grid-template-rows: auto;
-	grid-template-areas: "check name creator creation_date blank state";
+	grid-template-areas: "check name preview creator creation_date blank state";
 }
 section#wrapper main section#gcms_page form#listing section.page p{
 	display: flex;
@@ -172,12 +172,15 @@ section#wrapper main section#gcms_page form#listing section.page p:nth-child(2){
 	grid-area: name;
 }
 section#wrapper main section#gcms_page form#listing section.page p:nth-child(3){
-	grid-area: creator;
+	grid-area: preview;
 }
 section#wrapper main section#gcms_page form#listing section.page p:nth-child(4){
-	grid-area: creation_date;
+	grid-area: creator;
 }
 section#wrapper main section#gcms_page form#listing section.page p:nth-child(5){
+	grid-area: creation_date;
+}
+section#wrapper main section#gcms_page form#listing section.page p:nth-child(6){
 	grid-area: state;
 }
 section#wrapper main section#gcms_page table, thead, tbody, tr, th, td{
