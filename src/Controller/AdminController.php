@@ -27,7 +27,7 @@ class AdminController extends AbstractController
     	$pages = [];
     	$entities = scandir('../src/Entity');
     	foreach($entities as $entity){
-    		if(preg_match_all('@^(Page)(.)*@', $entity)){
+    		if(preg_match_all('#^(Page)(.)*#', $entity)){
     			$entity = substr($entity, 0, strlen($entity) - 4);
     			$pages[] = $entity;
     		}
@@ -62,6 +62,11 @@ class AdminController extends AbstractController
     		$cC->regenerateEntity($kernel, $pageName);
     		$cC->createEntityForm($kernel, $pageName);
             $cC->fullMigration($kernel);
+
+            //ajout submit type
+            $formFile = file_get_contents('../src/Form/'.$pageName.'Type.php');
+            $formFile = preg_replace("#'data_class' => ".$pageName."::class,#", "'data_class' => ".$pageName."::class,\n            'allow_extra_fields' => true", $formFile);
+            file_put_contents('../src/Form/'.$pageName.'Type.php', $formFile);
 
     		return $this->redirectToRoute('generic_form', [ 'page' => $pageName ]);
     	}

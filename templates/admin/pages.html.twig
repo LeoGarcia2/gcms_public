@@ -33,7 +33,7 @@
 	<section class="page">
 
 		<p><input type="checkbox" name="page-id" id="page-id"></p>
-		<p><a href="#">{{ page }}</a></p>
+		<p><a href="{{ path('generic_form', { page: page }) }}">{{ page }}</a></p>
 		<p>Created by Username</p>
 		<p>At 00/00/0000</p>
 		<p>Published <i class="material-icons">indeterminate_check_box</i></p>
