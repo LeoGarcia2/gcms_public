@@ -1,0 +1,1 @@
+All of your pages images are stored here
