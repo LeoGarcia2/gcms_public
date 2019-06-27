@@ -41,7 +41,8 @@ class AdminController extends AbstractController
             $pages[] = $repo->findAll()[0];
         }
         return $this->render('admin/pages.html.twig', [
-        	'pages' => $pages
+            'pages' => $pages,
+            'pagesE' => $entitiesPage,
         ]);
     }
 

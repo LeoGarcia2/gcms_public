@@ -4,6 +4,8 @@
 
 <h1>Pages</h1>
 
+{% set idPage = 0 %}
+
 <form id="new" method="post" action="{{ path('admin_new_page') }}">
 
 	<input type="text" name="entity_name" placeholder="Page's name" required>
@@ -33,10 +35,10 @@
 	<section class="page">
 
 		<p><input type="checkbox" name="page-id" id="page-id" value="{{ page.id }}"></p>
-		<p><a href="{{ path('generic_form', { page: page }) }}">{{ page.displayName }}</a></p>
-		<p><a href="{{ path('generic_page', { page: page }) }}">Preview data</a></p>
+		<p><a href="{{ path('generic_form', { page: pagesE[idPage] }) }}">{{ page.displayName }}</a></p>
+		<p><a href="{{ path('generic_page', { page: pagesE[idPage] }) }}">Preview data</a></p>
 		<p>Created by {{ page.author }}</p>
-		<p>At {{ page.createdAt }}</p>
+		<p>At {{ page.updatedAt|date('Y/m/d') }}</p>
 		{% if page.published == true %}
 			<p>Published <i class="material-icons">check_box</i></p>
 		{% else %}
@@ -44,6 +46,7 @@
 		{% endif %}
 		
 	</section>
+	{% set idPage = idPage + 1 %}
 
 	{% endfor %}
 
