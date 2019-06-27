@@ -28,11 +28,13 @@ class AdminController extends AbstractController
         $em = $this->getDoctrine()->getManager();
 
         if($request->isMethod('post')){
-            $entitiesToUpdate = [];            
+            $entitiesToUpdate = [];
+            $rawNames = [];
             foreach($_POST['pages'] as $pageToControl)
             {
                 $repoForControl = $em->getRepository('App\Entity\\'.$pageToControl);
-                $entitiesToUpdate[] = $repoForControl->findAll()[0];               
+                $entitiesToUpdate[] = $repoForControl->findAll()[0];
+                $rawNames[] = $pageToControl;
             }
             switch($_POST['controls']){
                 case 'publish':
@@ -50,6 +52,15 @@ class AdminController extends AbstractController
                     }
                     break;
                 case 'delete':
+                    foreach($rawNames as $rawName){
+                        unlink('../src/Entity/'.$rawName.'.php');
+                        unlink('../src/Form/'.$rawName.'Type.php');
+                        unlink('../src/Repository/'.$rawName.'Repository.php');
+                        unlink('../templates/theme/pages/'.strtolower($rawname).'.html.twig');
+                        $pageController = file_get_contents('../src/Controller/PageController.php');
+                        $pageController = preg_replace("#\/\/".strtolower($rawname)."start.*\/\/".strtolower($rawname)."end#", "", $pageController);
+                        file_put_contents('../src/Controller/PageController.php', $pageController);
+                    }
                     break;
             }
             $em->flush();
