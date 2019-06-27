@@ -1,6 +1,6 @@
 
     /**
-     * @Route("/pagenamelowercase", name="pagenamelowercase")
+     * @Route("/pageroutedefault", name="pagenamelowercase")
      */
     public function pagenameuppercase()
     {

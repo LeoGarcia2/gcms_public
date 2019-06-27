@@ -49,6 +49,8 @@
 </table>
 
 <form action="{{ path('fields_page', { page: pageName }) }}" method="post">
+	<label for="pageRoute">The page adress (after yourdomain.com/)</label>
+	<input id="pageRoute" name="pageRoute" type="text">
 	<select id="pageFields" name="pageFields[]" style="display: none;" multiple></select>
 	<select id="imageFields" name="imageFields[]" style="display: none;" multiple></select>
 	<textarea id="pageArea" name="pageArea" style="display: none;">{{page}}</textarea>
@@ -173,7 +175,7 @@
 
 		}
 
-		let baseFields = '    /**\n     * @ORM\\Column(type="string", length=255)\n     */\n    private $author;\n\n    /**\n     * @ORM\\Column(type="string", length=255)\n     */\n    private $displayName;\n\n    /**\n     * @ORM\\Column(type="datetime")\n     */\n    private $updatedAt;\n';
+		let baseFields = '    /**\n     * @ORM\\Column(type="string", length=255)\n     */\n    private $author;\n\n    /**\n     * @ORM\\Column(type="string", length=255)\n     */\n    private $displayName;\n\n    /**\n     * @ORM\\Column(type="datetime")\n     */\n    private $updatedAt;\n\n    /**\n     * @ORM\\Column(type="boolean")\n     */\n    private $published;\n';
 
 		phpCode = phpCode.replace('private $id;', 'private $id;\n\n'+baseFields+content);
 		$('#pageArea').val(phpCode);

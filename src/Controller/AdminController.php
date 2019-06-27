@@ -25,14 +25,21 @@ class AdminController extends AbstractController
      */
     public function pages()
     {
-    	$pages = [];
+        $em = $this->getDoctrine()->getManager();
+        $pages = [];
+    	$entitiesPage = [];
     	$entities = scandir('../src/Entity');
     	foreach($entities as $entity){
     		if(preg_match_all('#^(Page)(.)*#', $entity)){
     			$entity = substr($entity, 0, strlen($entity) - 4);
-    			$pages[] = $entity;
+    			$entitiesPage[] = $entity;
     		}
     	}
+        foreach($entitiesPage as $entityPage){
+            $classConst = 'App\Entity\\'.$entityPage;
+            $repo = $em->getRepository($classConst);
+            $pages[] = $repo->findAll()[0];
+        }
         return $this->render('admin/pages.html.twig', [
         	'pages' => $pages
         ]);
@@ -77,6 +84,12 @@ class AdminController extends AbstractController
             $route = file_get_contents('../src/Controller/gcms_default_route');
             $pageController = file_get_contents('../src/Controller/PageController.php');
 
+            if(isset($_POST['pageRoute']) && $_POST['pageRoute'] != ''){
+                $routePath = strtolower($_POST['pageRoute']);
+            }else{
+                $routePath = strtolower($pageName);
+            }
+            $route = preg_replace('#pageroutedefault#', $routePath, $route);
             $route = preg_replace('#pagenamelowercase#', strtolower($pageName), $route);
             $route = preg_replace('#pagenameuppercase#', ucfirst($pageName), $route);
 
@@ -125,6 +138,8 @@ class AdminController extends AbstractController
         }else{
             $entity = $entity[0];
         }
+
+        $entity->setPublished(true);
 
         $form = $this->createForm($formConst, $entity);
         $form->add('Save', SubmitType::class);
