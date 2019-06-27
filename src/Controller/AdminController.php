@@ -32,9 +32,12 @@ class AdminController extends AbstractController
             $rawNames = [];
             foreach($_POST['pages'] as $pageToControl)
             {
-                $repoForControl = $em->getRepository('App\Entity\\'.$pageToControl);
-                $entitiesToUpdate[] = $repoForControl->findAll()[0];
-                $rawNames[] = $pageToControl;
+                if($_POST['controls'] != 'delete'){
+                    $repoForControl = $em->getRepository('App\Entity\\'.$pageToControl);
+                    $entitiesToUpdate[] = $repoForControl->findAll()[0];
+                }else{
+                    $rawNames[] = $pageToControl;
+                }
             }
             switch($_POST['controls']){
                 case 'publish':
@@ -56,9 +59,9 @@ class AdminController extends AbstractController
                         unlink('../src/Entity/'.$rawName.'.php');
                         unlink('../src/Form/'.$rawName.'Type.php');
                         unlink('../src/Repository/'.$rawName.'Repository.php');
-                        unlink('../templates/theme/pages/'.strtolower($rawname).'.html.twig');
+                        unlink('../templates/theme/pages/'.strtolower($rawName).'.html.twig');
                         $pageController = file_get_contents('../src/Controller/PageController.php');
-                        $pageController = preg_replace("#\/\/".strtolower($rawname)."start.*\/\/".strtolower($rawname)."end#", "", $pageController);
+                        $pageController = preg_replace("#\/\/".strtolower($rawName)."start([\s\S]*)\/\/".strtolower($rawName)."end#", "", $pageController);
                         file_put_contents('../src/Controller/PageController.php', $pageController);
                     }
                     break;
