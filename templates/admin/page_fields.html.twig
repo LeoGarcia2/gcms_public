@@ -154,7 +154,7 @@
 			element = element+'\n     */\n    private $'+nameForTemplate+';\n';
 			console.log(imageType);
 			if(imageType == 'image'){
-				element = element+'\n    /**\n     * @Vich\\UploadableField(mapping="images", fileNameProperty="'+nameForTemplate+'")\n     */\n    private $'+nameForTemplate+'File;\n    public function set'+nameForTemplate.charAt(0).toUpperCase()+nameForTemplate.slice(1)+'(?File $'+nameForTemplate+' = null): void\n    {\n        $this->'+nameForTemplate+' = $'+nameForTemplate+';\n        if(null !== $'+nameForTemplate+'){\n            $this->updatedAt = new \\Datetime();\n        }\n    }\n    public function get'+nameForTemplate.charAt(0).toUpperCase()+nameForTemplate.slice(1)+'(): ?File\n        return $this->'+nameForTemplate+';\n    }\n';
+				element = element+'\n    /**\n     * @Vich\\UploadableField(mapping="images", fileNameProperty="'+nameForTemplate+'")\n     */\n    private $'+nameForTemplate+'File;\n    public function set'+nameForTemplate.charAt(0).toUpperCase()+nameForTemplate.slice(1)+'File(?File $'+nameForTemplate+'File = null): void\n    {\n        $this->'+nameForTemplate+'File = $'+nameForTemplate+'File;\n        if(null !== $'+nameForTemplate+'File){\n            $this->updatedAt = new \\Datetime();\n        }\n    }\n    public function get'+nameForTemplate.charAt(0).toUpperCase()+nameForTemplate.slice(1)+'File(): ?File\n    {\n        return $this->'+nameForTemplate+'File;\n    }\n';
 				imageType = '';
 			}
 
