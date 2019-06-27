@@ -50,6 +50,7 @@
 
 <form action="{{ path('fields_page', { page: pageName }) }}" method="post">
 	<select id="pageFields" name="pageFields[]" style="display: none;" multiple></select>
+	<select id="imageFields" name="imageFields[]" style="display: none;" multiple></select>
 	<textarea id="pageArea" name="pageArea" style="display: none;">{{page}}</textarea>
 	<button id="addPage" type="submit" style="opacity: 0;"></button>
 </form>	
@@ -147,6 +148,8 @@
 				value.type = 'string';
 				imageType = 'image';
 				value.options += ', length=255';
+
+				$('#imageFields').append('<option value="'+nameForTemplate+'" selected>'+nameForTemplate+'</option>');
 			}
 
 			let element = '\n    /**\n     * @ORM\\Column(type="'+value.type+'", '+value.options+')';

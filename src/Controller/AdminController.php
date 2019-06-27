@@ -66,22 +66,32 @@ class AdminController extends AbstractController
 
             $template = file_get_contents('../templates/theme/pages/gcms_default.html.twig');
             $pageFields = '';
+
             foreach($_POST['pageFields'] as $field){
                 $pageFields .= "<section>{{ page.".$field." }}</section>\n    ";
             }
+
             $template = preg_replace('#fieldsHere#', $pageFields, $template);
             file_put_contents('../templates/theme/pages/'.strtolower($pageName).'.html.twig', $template);
 
             $route = file_get_contents('../src/Controller/gcms_default_route');
             $pageController = file_get_contents('../src/Controller/PageController.php');
+
             $route = preg_replace('#pagenamelowercase#', strtolower($pageName), $route);
             $route = preg_replace('#pagenameuppercase#', ucfirst($pageName), $route);
+
             $pageController = preg_replace("#AbstractController
 {#", "AbstractController
 {".$route, $pageController);
             file_put_contents('../src/Controller/PageController.php', $pageController);
 
             $formFile = file_get_contents('../src/Form/'.$pageName.'Type.php');
+            $formFile = preg_replace('#use App\Entity#', "use Vich\UploaderBundle\Form\Type\VichFileType;\nuse App\Entity", $formFile);
+
+            foreach($_POST['imageFields'] as $field){
+                $formFile = preg_replace("#->add('".$field."')#", "->add('".$field."File', VichFileType::class)", $formFile);
+            }
+
             $formFile = preg_replace("#'data_class' => ".$pageName."::class,#", "'data_class' => ".$pageName."::class,\n            'allow_extra_fields' => true", $formFile);
             file_put_contents('../src/Form/'.$pageName.'Type.php', $formFile);
 
