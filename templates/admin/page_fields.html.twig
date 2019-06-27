@@ -143,24 +143,30 @@
 			$('#pageFields').append('<option value="'+nameForTemplate+'" selected>'+nameForTemplate+'</option>');
 
 			if(value.type == 'image'){
+				contains_image = true;
 				value.type = 'string';
 				imageType = 'image';
+				value.options += ', length=255';
 			}
 
 			let element = '\n    /**\n     * @ORM\\Column(type="'+value.type+'", '+value.options+')';
 
+			element = element+'\n     */\n    private $'+nameForTemplate+';\n';
+
 			if(imageType == 'image'){
-				element = element+'\n     * @Assert\\Image()';
+				element = element+'\n    /**\n     * @Vich\\UploadableField(mapping="images", fileNameProperty="'+nameForTemplate+'")\n     */\n    private $'+nameForTemplate+'File;\n';
 				imageType = '';
 			}
-			element = element+'\n     */\n    private $'+nameForTemplate+';\n';
+
 			content = content+element;
 
 		});
 		
 		if(contains_image){
 
-			phpCode = phpCode.replace('use Doctrine\\ORM\\Mapping as ORM;', 'use Doctrine\\ORM\\Mapping as ORM;\nuse Symfony\\Component\\Validator\\Constraints as Assert;');
+			phpCode = phpCode.replace('Repository")\n */', 'Repository")\n * @Vich\Uploadable\n */');
+
+			phpCode = phpCode.replace('use Doctrine\\ORM\\Mapping as ORM;', 'use Doctrine\\ORM\\Mapping as ORM;\nuse Symfony\\Component\\HttpFoundation\\File\\File;\nuse Vich\\UploaderBundle\\Mapping\\Annotation as Vich;');
 
 		}
 
@@ -173,15 +179,9 @@
 
 	function updateDisplay(){
 
-		contains_image = false;
-
 		$('tbody').html('');
 
 		fields.forEach(function(value, key){
-
-			if(value.type == 'file'){
-				contains_image = true;
-			}
 
 			$('tbody').html($('tbody').html()+
 				'<tr><td>'+key+
