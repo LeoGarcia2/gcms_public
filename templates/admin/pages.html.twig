@@ -19,7 +19,7 @@
 <form id="listing" method="post" action="{{ path('admin_pages') }}">
 
 	<section id="controls">
-		<input type="radio" name="controls" id="publish" value="publish">
+		<input type="radio" name="controls" id="publish" value="publish" checked>
 		<label for="publish">Publish</label>
 		<input type="radio" name="controls" id="unpublish" value="unpublish">
 		<label for="unpublish">Unpublish</label>
@@ -34,7 +34,7 @@
 
 	<section class="page">
 
-		<p><input type="checkbox" name="page-id" id="page-id" value="{{ page.id }}"></p>
+		<p><input type="checkbox" name="pages[]" value="{{ pagesE[idPage] }}"></p>
 		<p><a href="{{ path('generic_form', { page: pagesE[idPage] }) }}">{{ page.displayName }}</a></p>
 		<p><a href="{{ path('generic_page', { page: pagesE[idPage] }) }}">Preview data</a></p>
 		<p>Created by {{ page.author }}</p>

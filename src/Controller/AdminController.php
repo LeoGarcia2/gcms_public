@@ -23,9 +23,38 @@ class AdminController extends AbstractController
     /**
      * @Route("/admin/pages", name="admin_pages")
      */
-    public function pages()
+    public function pages(Request $request)
     {
         $em = $this->getDoctrine()->getManager();
+
+        if($request->isMethod('post')){
+            $entitiesToUpdate = [];            
+            foreach($_POST['pages'] as $pageToControl)
+            {
+                $repoForControl = $em->getRepository('App\Entity\\'.$pageToControl);
+                $entitiesToUpdate[] = $repoForControl->findAll()[0];               
+            }
+            switch($_POST['controls']){
+                case 'publish':
+                    foreach($entitiesToUpdate as $entityToControl)
+                    {
+                        $entityToControl->setPublished(true);
+                        $em->persist($entityToControl);
+                    }
+                    break;
+                case 'unpublish':
+                    foreach($entitiesToUpdate as $entityToControl)
+                    {
+                        $entityToControl->setPublished(false);
+                        $em->persist($entityToControl);
+                    }
+                    break;
+                case 'delete':
+                    break;
+            }
+            $em->flush();
+        }
+
         $pages = [];
     	$entitiesPage = [];
     	$entities = scandir('../src/Entity');
