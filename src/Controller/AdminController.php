@@ -116,11 +116,15 @@ class AdminController extends AbstractController
 
         $form = $this->createForm($formConst, $entity);
         $form->add('Save', SubmitType::class);
+        $form->remove('author');
+        $form->remove('updatedAt');
 
         $form->handleRequest($request);
 
         if($form->isSubmitted() && $form->isValid()){
             $entity = $form->getData();
+            $entity->setAuthor($this->getUser()->getUsername());
+            $entity->setUpdatedAt(new \DateTime());
             $em->persist($entity);
             $em->flush();
 
