@@ -154,7 +154,7 @@
 			element = element+'\n     */\n    private $'+nameForTemplate+';\n';
 
 			if(imageType == 'image'){
-				element = element+'\n    /**\n     * @Vich\\UploadableField(mapping="images", fileNameProperty="'+nameForTemplate+'")\n     */\n    private $'+nameForTemplate+'File;\n';
+				element = element+'\n    /**\n     * @Vich\\UploadableField(mapping="images", fileNameProperty="'+nameForTemplate+'")\n     */\n    private $'+nameForTemplate+'File;\n    public function set'+nameForTemplate.charAt[0].toUpperCase()+nameForTemplate.slice(1)+'(?File $'+nameForTemplate+' = null): void\n    {\n        $this->'+nameForTemplate+' = $'+nameForTemplate+';\n        if(null !== $'+nameForTemplate+'){\n            $this->updatedAt = new \\Datetime();\n        }\n    }\n    public function get'+nameForTemplate.charAt[0].toUpperCase()+nameForTemplate.slice(1)+'(): ?File\n        return $this->'+nameForTemplate+';\n    }\n';
 				imageType = '';
 			}
 
