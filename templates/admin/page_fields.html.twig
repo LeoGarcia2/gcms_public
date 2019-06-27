@@ -170,7 +170,9 @@
 
 		}
 
-		phpCode = phpCode.replace('private $id;', 'private $id;\n'+content);
+		let baseFields = '    /**\n     * @ORM\\Column(type="string", length=255)\n     */\n    private $author;\n\n    /**\n     * @ORM\\Column(type="string", length=255)\n     */\n    private $displayName;\n\n    /**\n     * @ORM\\Column(type="datetime")\n     */\n    private $updatedAt;\n';
+
+		phpCode = phpCode.replace('private $id;', 'private $id;\n\n'+baseFields+content);
 		$('#pageArea').val(phpCode);
 
 		$('#addPage').click();
