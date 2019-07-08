@@ -34,7 +34,7 @@ class AdminController extends AbstractController
      */
     public function logs()
     {
-        $logFile = fopen("../var/log/dev.log","r");
+        $logFile = fopen('../var/log/dev.log','r');
         $logs = [];
   
         while(!feof($logFile)){
@@ -48,6 +48,45 @@ class AdminController extends AbstractController
 
         return $this->render('admin/logs.html.twig', [
             'logs' => $logs
+        ]);
+    }
+
+    /**
+     * @Route("/admin/database", name="admin_database")
+     */
+    public function database(Request $request, ConsoleController $cC, KernelInterface $kernel)
+    {
+        $databaseFile = fopen('../.env','r');
+
+        $databaseConf = '';
+        $databaseContent = [];
+  
+        while(!feof($databaseFile)){
+            $databaseLine = fgets($databaseFile);
+            $databaseContent[] = $databaseLine;
+            if(strpos($databaseLine, 'DATABASE_URL=') !== false){
+                $databaseConf = $databaseLine;
+            }
+        }
+        fclose($databaseFile);
+
+        if($request->isMethod('post')){
+            $newDatabaseConf = $_POST['databaseConf'];
+
+            for($i = 0; $i < count($databaseContent); $i++){
+                if(strpos($databaseContent[$i], 'DATABASE_URL=') !== false){
+                    $databaseContent[$i] = $newDatabaseConf."\n";
+                }
+            }
+            $newDatabaseConf = implode('', $databaseContent);
+            file_put_contents('../.env', $newDatabaseConf);
+            $cC->createDatabase($kernel);
+
+            return $this->redirectToRoute('admin_database');
+        }
+
+        return $this->render('admin/database.html.twig', [
+            'databaseConf' => $databaseConf
         ]);
     }
 
