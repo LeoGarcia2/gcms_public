@@ -92,6 +92,62 @@ class AdminController extends AbstractController
     }
 
     /**
+     * @Route("/admin/siteconf", name="admin_siteconf")
+     */
+    public function database(Request $request, ConsoleController $cC, KernelInterface $kernel)
+    {
+        $confFile = fopen('../config/packages/twig.yaml','r');
+
+        $nameConf = '';
+        $sloganConf = '';
+        $localeConf = '';
+        $confContent = [];
+  
+        while(!feof($confFile)){
+            $confLine = fgets($confFile);
+            $confContent[] = $confLine;
+            if(strpos($confLine, 'site_name:') !== false){
+                $nameConf = $confLine;
+            }
+            if(strpos($confLine, 'site_slogan:') !== false){
+                $sloganConf = $confLine;
+            }
+            if(strpos($confLine, 'site_locale:') !== false){
+                $localeConf = $confLine;
+            }
+        }
+        fclose($confFile);
+
+        if($request->isMethod('post')){
+            $newNameConf = $_POST['nameConf'];
+            $newSloganConf = $_POST['sloganConf'];
+            $newLocaleConf = $_POST['localeConf'];
+
+            for($i = 0; $i < count($confContent); $i++){
+                if(strpos($confLine, 'site_name:') !== false){
+                    $confContent[$i] = $newNameConf."\n";
+                }
+                if(strpos($confLine, 'site_slogan:') !== false){
+                    $confContent[$i] = $newSloganConf."\n";
+                }
+                if(strpos($confLine, 'site_locale:') !== false){
+                    $confContent[$i] = $newLocaleConf."\n";
+                }
+            }
+            $newConf = implode('', $confContent);
+            file_put_contents('../config/packages/twig.yaml', $newConf);
+
+            return $this->redirectToRoute('admin_siteconf');
+        }
+
+        return $this->render('admin/siteconf.html.twig', [
+            'nameConf' => $nameConf,
+            'sloganConf' => $sloganConf,
+            'localeConf' => $localeConf
+        ]);
+    }
+
+    /**
      * @Route("/admin/pages", name="admin_pages")
      */
     public function pages(Request $request)
