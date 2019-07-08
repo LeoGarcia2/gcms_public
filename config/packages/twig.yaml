@@ -6,3 +6,4 @@ twig:
         site_name: MyAwesomeWebsite
         site_slogan: The best website ever!
         site_locale: localeBase
+        site_homepage: admin_home
