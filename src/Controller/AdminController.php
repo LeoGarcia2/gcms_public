@@ -81,6 +81,7 @@ class AdminController extends AbstractController
             $newDatabaseConf = implode('', $databaseContent);
             file_put_contents('../.env', $newDatabaseConf);
             $cC->createDatabase($kernel);
+            $cC->fullMigration($kernel);
 
             return $this->redirectToRoute('admin_database');
         }

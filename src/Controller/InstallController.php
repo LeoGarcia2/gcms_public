@@ -41,7 +41,7 @@ class InstallController extends AbstractController
                 move_uploaded_file($_FILES['favicon']['tmp_name'], './assets/site_config/images/favicon.png');
             }
 
-            return $this->redirectToRoute('update_db', ['stage' => '0']);
+            return $this->redirectToRoute('update_db');
         }
 
         return $this->render('install/index.html.twig');
@@ -76,16 +76,12 @@ class InstallController extends AbstractController
     }
 
     /**
-     * @Route("/updateDb/{stage}", name="update_db")
+     * @Route("/updateDb", name="update_db")
      */
     public function updateDb(ConsoleController $cC, KernelInterface $kernel, $stage)
     {
-        if($stage == '0'){
-            $cC->createDatabase($kernel);
-            return $this->redirectToRoute('update_db', ['stage' => '1']);
-        }else{
-            $cC->fullMigration($kernel);
-            return $this->render('install/register.html.twig');
-        }
+        $cC->createDatabase($kernel);
+        $cC->fullMigration($kernel);
+        return $this->render('install/register.html.twig');
     }
 }
