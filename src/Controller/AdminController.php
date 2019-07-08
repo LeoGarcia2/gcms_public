@@ -94,7 +94,7 @@ class AdminController extends AbstractController
     /**
      * @Route("/admin/siteconf", name="admin_siteconf")
      */
-    public function database(Request $request, ConsoleController $cC, KernelInterface $kernel)
+    public function siteconf(Request $request)
     {
         $confFile = fopen('../config/packages/twig.yaml','r');
 
@@ -124,13 +124,13 @@ class AdminController extends AbstractController
             $newLocaleConf = $_POST['localeConf'];
 
             for($i = 0; $i < count($confContent); $i++){
-                if(strpos($confLine, 'site_name:') !== false){
+                if(strpos($confContent[$i], 'site_name:') !== false){
                     $confContent[$i] = $newNameConf."\n";
                 }
-                if(strpos($confLine, 'site_slogan:') !== false){
+                if(strpos($confContent[$i], 'site_slogan:') !== false){
                     $confContent[$i] = $newSloganConf."\n";
                 }
-                if(strpos($confLine, 'site_locale:') !== false){
+                if(strpos($confContent[$i], 'site_locale:') !== false){
                     $confContent[$i] = $newLocaleConf."\n";
                 }
             }

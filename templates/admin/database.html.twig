@@ -2,7 +2,7 @@
 
 {% block gcms_page %}
 	<p>Your current database's configuration is : {{ databaseConf }}</p>
-	<p>If you want to update it, submit the following form, it will update the .env file then execute the commands database:create, make:migration and doctrine:migrations:migrate</p>
+	<p>If you want to update it, submit the following form, it will update the .env file then execute the commands database:create, make:migration and doctrine:migrations:migrate.</p>
 
 	<form action="{{ path('admin_database') }}" method="post">
 		<input class="long_input" type="text" name="databaseConf" value="{{ databaseConf }}" required>

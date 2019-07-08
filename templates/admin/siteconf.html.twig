@@ -2,14 +2,15 @@
 
 {% block gcms_page %}
 	<p>Your current website's configuration is :</p>
-	<p>Name : {{ nameConf }}</p>
-	<p>Slogan : {{ sloganConf }}</p>
-	<p>Locale : {{ localeConf }}</p>
+	<p>{{ nameConf }}</p>
+	<p>{{ sloganConf }}</p>
+	<p>{{ localeConf }}</p>
 
 	<form action="{{ path('admin_siteconf') }}" method="post">
 		<input class="long_input" type="text" name="nameConf" value="{{ nameConf }}" required>
 		<input class="long_input" type="text" name="sloganConf" value="{{ sloganConf }}" required>
 		<input class="long_input" type="text" name="localeConf" value="{{ localeConf }}" required>
+		<p>Do not remove the spaces nor the name of the configuration's variables, they're part of an yaml file so if you do it the file may become unreadable, be careful.</p>
 		<button type="submit">Update</button>
 	</form>
 {% endblock %}
