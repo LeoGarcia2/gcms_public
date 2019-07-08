@@ -112,7 +112,9 @@ section#wrapper main section#gcms_page{
 	padding: 20px;
 	border-bottom: 2px solid #000;
 }
-section#wrapper main section#gcms_menu nav a{
+section#wrapper main section#gcms_menu nav a,
+section#wrapper main section#gcms_menu nav section.dropdown,
+section#wrapper main section#gcms_menu nav section.dropdown section.submenu a{
 	display: flex;
 	align-items: center;
 
@@ -120,10 +122,38 @@ section#wrapper main section#gcms_menu nav a{
 	height: 60px;
 	color: #000;
 	text-decoration: none;
+	position: relative;
+	cursor: pointer;
 }
-section#wrapper main section#gcms_menu nav a:hover{
+section#wrapper main section#gcms_menu nav a:hover,
+section#wrapper main section#gcms_menu nav section.dropdown:hover,
+section#wrapper main section#gcms_menu nav section.dropdown section.submenu a:hover{
 	background-color: #000;
 	color: #ddd;
+}
+section#wrapper main section#gcms_menu nav section.dropdown span{
+	width: 0;
+	height: 0;
+	border: 10px solid transparent;
+	border-left-color: #000;
+	position: absolute;
+	right: 5px;
+	top: 20px;
+}
+section#wrapper main section#gcms_menu nav section.dropdown:hover span{	
+	border-left-color: #ddd;
+}
+section#wrapper main section#gcms_menu nav section.dropdown section.submenu{
+	background-color: #ddd;
+	display: none;
+	position: absolute;
+	left: 100%;
+	top: -2px;
+	border: 2px solid #000;
+	width: 100%;
+}
+section#wrapper main section#gcms_menu nav section.dropdown:hover section.submenu{	
+	display: block;
 }
 footer{
 	display: flex;

@@ -21,6 +21,37 @@ class AdminController extends AbstractController
     }
 
     /**
+     * @Route("/admin/clearcache/{lastRoute}", name="admin_cacheclear")
+     */
+    public function cacheClear(ConsoleController $cC, KernelInterface $kernel, $lastRoute)
+    {
+        $cC->clearCache($kernel);
+        return $this->redirectToRoute($lastRoute);
+    }
+
+    /**
+     * @Route("/admin/logs", name="admin_logs")
+     */
+    public function logs()
+    {
+        $logFile = fopen("../var/log/dev.log","r");
+        $logs = [];
+  
+        while(!feof($logFile)){
+            $logLine = fgets($logFile);
+            $logs[] = $logLine;
+        }
+        fclose($logFile);
+
+        $logs = array_reverse($logs);
+        $logs = array_slice($logs, 0, 100);
+
+        return $this->render('admin/logs.html.twig', [
+            'logs' => $logs
+        ]);
+    }
+
+    /**
      * @Route("/admin/pages", name="admin_pages")
      */
     public function pages(Request $request)

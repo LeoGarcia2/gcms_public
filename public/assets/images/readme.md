@@ -1,1 +1,1 @@
-All of your pages images are stored here
+All of your website's images are stored here

@@ -37,6 +37,19 @@ class ConsoleController extends AbstractController
         return new Response($content);
     }
 
+    public function clearCache(KernelInterface $kernel)
+    {
+        $application = new Application($kernel);
+        $application->setAutoExit(false);
+
+        $input = new ArrayInput([
+            'command' => 'cache:clear'
+        ]);
+
+        $output = new NullOutput();
+        $application->run($input, $output);
+    }
+
     public function createDatabase(KernelInterface $kernel)
     {
         $application = new Application($kernel);

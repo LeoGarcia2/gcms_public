@@ -49,7 +49,17 @@
 				<a href="#">Entries</a>
 				<a href="#">Components</a>
 				<hr>
-				<a href="#">Config</a>
+				<section class="dropdown">Config <span></span>
+					<section class="submenu">
+						<a href="#">Routes</a>
+						<a href="#">Taxonomy</a>
+						<a href="#">Translations</a>
+						<a href="{{ path('admin_cacheclear', { lastRoute: app.request.get('_route') }) }}">Clear cache</a>
+						<a href="{{ path('admin_logs') }}">Logs</a>
+						<a href="#">Edit site's config</a>
+						<a href="#">Edit database's config</a>
+					</section>
+				</section>
 				<a href="#">Files</a>
 				<a href="#">Themes</a>
 				<a href="#">Extensions</a>
