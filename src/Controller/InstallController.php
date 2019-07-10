@@ -78,7 +78,7 @@ class InstallController extends AbstractController
     /**
      * @Route("/updateDb", name="update_db")
      */
-    public function updateDb(ConsoleController $cC, KernelInterface $kernel, $stage)
+    public function updateDb(ConsoleController $cC, KernelInterface $kernel)
     {
         $cC->createDatabase($kernel);
         $cC->fullMigration($kernel);
