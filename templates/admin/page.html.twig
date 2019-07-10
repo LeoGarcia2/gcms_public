@@ -13,7 +13,7 @@
 		{% set path = name[:-4] %}
 		{% set url = entity[path] %}
 
-		<section><b>{{ name }}</b> : <img width="200" src="/assets/images/{{ url }}"/></section>
+		<section><b>{{ name }}</b> : <img width="200" src="{{ path('assets') }}/images/{{ url }}"/></section>
 		
 		{% else %}
 
