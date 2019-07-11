@@ -180,6 +180,22 @@ class AdminController extends AbstractController
      */
     public function taxonomy(TaxonomyController $tC)
     {
+        $taxonomyController = file_get_contents('../src/Controller/TaxonomyController.php');
+        if(isset($_GET['from'])){
+            preg_match("#public \\$".$_GET['from'].".*;#", $taxonomyController, $lineOfCategory);
+            $lineOfCategory = $lineOfCategory[0];
+            $lineOfCategory = preg_replace("#'".$_GET['delete']."'\,#", "", $lineOfCategory);
+            $taxonomyController = preg_replace("#public \\$".$_GET['from'].".*;#", $lineOfCategory, $taxonomyController);
+            file_put_contents('../src/Controller/TaxonomyController.php', $taxonomyController);
+            return $this->redirectToRoute('admin_taxonomy');
+        }else{
+            if(isset($_GET['delete'])){
+                $taxonomyController = preg_replace("#public \\$".$_GET['delete'].".*;#", "", $taxonomyController);
+                $taxonomyController = preg_replace("#    \n#", "", $taxonomyController);
+                file_put_contents('../src/Controller/TaxonomyController.php', $taxonomyController);
+            }
+        }
+
         $taxonomy = get_class_vars(get_class($tC));
 
         return $this->render('admin/taxonomy.html.twig', [
@@ -208,15 +224,13 @@ class AdminController extends AbstractController
             }
             switch($_POST['controls']){
                 case 'publish':
-                    foreach($entitiesToUpdate as $entityToControl)
-                    {
+                    foreach($entitiesToUpdate as $entityToControl){
                         $entityToControl->setPublished(true);
                         $em->persist($entityToControl);
                     }
                     break;
                 case 'unpublish':
-                    foreach($entitiesToUpdate as $entityToControl)
-                    {
+                    foreach($entitiesToUpdate as $entityToControl){
                         $entityToControl->setPublished(false);
                         $em->persist($entityToControl);
                     }
