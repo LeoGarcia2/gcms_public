@@ -56,7 +56,7 @@
 				<section class="dropdown">Config <span></span>
 					<section class="submenu">
 						<a href="#">Routes</a>
-						<a href="#">Taxonomy</a>
+						<a href="{{ path('admin_taxonomy') }}">Taxonomy</a>
 						<a href="#">Translations</a>
 						<a href="{{ path('admin_cacheclear', { lastRoute: app.request.get('_route') }) }}">Clear cache</a>
 						<a href="{{ path('admin_logs') }}">Logs</a>

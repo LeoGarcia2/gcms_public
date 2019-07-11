@@ -25,6 +25,9 @@ p{
 a{
 	cursor: pointer;
 }
+input.medium_input{
+	width: 40%;
+}
 input.long_input{
 	width: 80%;
 }

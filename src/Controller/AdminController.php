@@ -6,6 +6,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpKernel\KernelInterface;
 use App\Controller\ConsoleController;
+use App\Controller\TaxonomyController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
@@ -154,7 +155,7 @@ class AdminController extends AbstractController
     /**
      * @Route("/admin/files", name="admin_files")
      */
-    public function files(Request $request)
+    public function files()
     {
         if(isset($_GET['delete'])){
             unlink('../public/assets/images/'.$_GET['delete']);
@@ -171,6 +172,18 @@ class AdminController extends AbstractController
 
         return $this->render('admin/files.html.twig', [
             'files' => $files
+        ]);
+    }
+
+    /**
+     * @Route("/admin/taxonomy", name="admin_taxonomy")
+     */
+    public function taxonomy(TaxonomyController $tC)
+    {
+        $taxonomy = get_class_vars(get_class($tC));
+
+        return $this->render('admin/taxonomy.html.twig', [
+            'taxonomy' => $taxonomy
         ]);
     }
 

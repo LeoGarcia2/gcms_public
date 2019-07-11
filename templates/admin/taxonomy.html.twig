@@ -1,0 +1,29 @@
+{% extends 'admin/layout.html.twig' %}
+
+{% block gcms_page %}
+
+	<form action="{{ path('admin_taxonomy') }}" method="post">
+		<input class="medium_input" type="text" placeholder="Add a new taxonomy group" name="nameOfNewTaxonomy">
+		<button type="submit">Add</button>
+	</form>
+
+	{% for category, content in taxonomy %}
+		{% if category != 'container' %}
+			<h3>
+				{{ category }} :
+				<a href="{{ path('admin_taxonomy') }}?delete={{ category }}"><i class="material-icons">clear</i></a>
+			</h3>
+			{% for item in content %}
+				<p>
+					{{ item }}
+					<a href="{{ path('admin_taxonomy') }}?delete={{ item }}&from={{ category }}"><i class="material-icons">clear</i></a>
+				</p>
+			{% endfor %}
+			<form action="{{ path('admin_taxonomy') }}" method="post">
+				<input type="text" placeholder="Add to {{ category }}" name="{{ category }}">
+				<button type="submit">Add</button>
+			</form>
+		{% endif %}
+	{% endfor %}
+
+{% endblock %}
