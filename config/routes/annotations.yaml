@@ -1,3 +1,31 @@
-controllers:
-    resource: ../../src/Controller/
+Console:
+    resource: App\Controller\ConsoleController
+    type: annotation
+
+Assets:
+    resource: App\Controller\AssetsController
+    type: annotation
+
+Taxonomy:
+    resource: App\Controller\TaxonomyController
+    type: annotation
+
+Install:
+    resource: App\Controller\InstallController
+    type: annotation
+
+Admin:
+    resource: App\Controller\AdminController
+    type: annotation
+
+Security:
+    resource: App\Controller\SecurityController
+    type: annotation
+
+Page:
+    resource: App\Controller\PageController
+    type: annotation
+
+Entries:
+    resource: App\Controller\EntriesController
     type: annotation
