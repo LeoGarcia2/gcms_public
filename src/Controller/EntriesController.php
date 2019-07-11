@@ -10,6 +10,13 @@ use Symfony\Component\HttpFoundation\Response;
 class EntriesController extends AbstractController
 {
     /**
+     * @Route("/{contentType}", name="listing")
+     */
+    public function listing(Request $request, $contentType)
+    {
+        return new Response($contentType);
+    }
+    /**
      * @Route("/{contentType}/{id}", name="entry", requirements={"id"="\d+"})
      */
     public function entry(Request $request, $contentType, $id)
