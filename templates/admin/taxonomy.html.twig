@@ -20,7 +20,8 @@
 				</p>
 			{% endfor %}
 			<form action="{{ path('admin_taxonomy') }}" method="post">
-				<input type="text" placeholder="Add to {{ category }}" name="{{ category }}">
+				<input type="text" placeholder="Add to {{ category }}" name="toAdd">
+				<input type="hidden" name="category" value="{{ category }}">
 				<button type="submit">Add</button>
 			</form>
 		{% endif %}

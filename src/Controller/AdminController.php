@@ -178,9 +178,26 @@ class AdminController extends AbstractController
     /**
      * @Route("/admin/taxonomy", name="admin_taxonomy")
      */
-    public function taxonomy(TaxonomyController $tC)
+    public function taxonomy(Request $request, TaxonomyController $tC)
     {
         $taxonomyController = file_get_contents('../src/Controller/TaxonomyController.php');
+
+        if($request->isMethod('post')){
+            if(isset($_POST['nameOfNewTaxonomy'])){                
+                $taxonomyController = preg_replace("#}#", "    public $".$_POST['nameOfNewTaxonomy']." = [];\n}", $taxonomyController);
+                file_put_contents('../src/Controller/TaxonomyController.php', $taxonomyController);
+                return $this->redirectToRoute('admin_taxonomy');
+            }
+            if(isset($_POST['category']) && isset($_POST['toAdd'])){                
+                preg_match("#public \\$".$_POST['category'].".*;#", $taxonomyController, $lineOfCategory);
+                $lineOfCategory = $lineOfCategory[0];
+                $lineOfCategory = preg_replace("#]#", "'".$_POST['toAdd']."',]", $lineOfCategory);
+                $taxonomyController = preg_replace("#public \\$".$_POST['category'].".*;#", $lineOfCategory, $taxonomyController);
+                file_put_contents('../src/Controller/TaxonomyController.php', $taxonomyController);
+                return $this->redirectToRoute('admin_taxonomy');
+            }
+        }
+
         if(isset($_GET['from'])){
             preg_match("#public \\$".$_GET['from'].".*;#", $taxonomyController, $lineOfCategory);
             $lineOfCategory = $lineOfCategory[0];
