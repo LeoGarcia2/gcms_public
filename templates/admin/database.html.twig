@@ -1,6 +1,7 @@
 {% extends 'admin/layout.html.twig' %}
 
 {% block gcms_page %}
+
 	<p>Your current database's configuration is :</p>
 	<p>- {{ databaseConf }}</p>
 	<p>If you want to update it, submit the following form, it will update the .env file then execute the commands database:create, make:migration and doctrine:migrations:migrate.</p>
@@ -9,4 +10,5 @@
 		<input class="long_input" type="text" name="databaseConf" value="{{ databaseConf }}" required>
 		<p><button type="submit">Update</button></p>
 	</form>
+	
 {% endblock %}

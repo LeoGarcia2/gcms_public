@@ -152,6 +152,25 @@ class AdminController extends AbstractController
     }
 
     /**
+     * @Route("/admin/files", name="admin_files")
+     */
+    public function files(Request $request)
+    {
+        $filesTmp = scandir('../public/assets/images');
+        $files = [];
+
+        for($i = 0; $i < count($filesTmp); $i++){
+            if($filesTmp[$i] != '.' && $filesTmp[$i] != '..' && $filesTmp[$i] != 'readme.md'){
+                array_push($files, $filesTmp[$i]);
+            }
+        }
+
+        return $this->render('admin/files.html.twig', [
+            'files' => $files
+        ]);
+    }
+
+    /**
      * @Route("/admin/pages", name="admin_pages")
      */
     public function pages(Request $request)

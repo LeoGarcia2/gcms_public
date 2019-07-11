@@ -1,0 +1,9 @@
+{% extends 'admin/layout.html.twig' %}
+
+{% block gcms_page %}
+
+	{% for file in files %}
+		<p>{{ file }}</p>
+	{% endfor %}
+
+{% endblock %}
