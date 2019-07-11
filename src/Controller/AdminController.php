@@ -193,6 +193,7 @@ class AdminController extends AbstractController
                 $taxonomyController = preg_replace("#public \\$".$_GET['delete'].".*;#", "", $taxonomyController);
                 $taxonomyController = preg_replace("#    \n#", "", $taxonomyController);
                 file_put_contents('../src/Controller/TaxonomyController.php', $taxonomyController);
+                return $this->redirectToRoute('admin_taxonomy');
             }
         }
 
