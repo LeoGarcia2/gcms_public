@@ -118,10 +118,14 @@ class AdminController extends AbstractController
         }
         fclose($confFile);
 
+        $nameConf = substr($nameConf, 19, strlen($nameConf));
+        $sloganConf = substr($sloganConf, 21, strlen($sloganConf));
+        $localeConf = substr($localeConf, 21, strlen($localeConf));
+
         if($request->isMethod('post')){
-            $newNameConf = $_POST['nameConf'];
-            $newSloganConf = $_POST['sloganConf'];
-            $newLocaleConf = $_POST['localeConf'];
+            $newNameConf = '        site_name: '.$_POST['nameConf'];
+            $newSloganConf = '        site_slogan: '.$_POST['sloganConf'];
+            $newLocaleConf = '        site_locale: '.$_POST['localeConf'];
 
             for($i = 0; $i < count($confContent); $i++){
                 if(strpos($confContent[$i], 'site_name:') !== false){
