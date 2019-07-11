@@ -156,6 +156,10 @@ class AdminController extends AbstractController
      */
     public function files(Request $request)
     {
+        if(isset($_GET['delete'])){
+            unlink('../public/assets/images/'.$_GET['delete']);
+        }
+
         $filesTmp = scandir('../public/assets/images');
         $files = [];
 

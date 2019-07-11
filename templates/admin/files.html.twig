@@ -2,8 +2,17 @@
 
 {% block gcms_page %}
 
-	{% for file in files %}
-		<p>{{ file }}</p>
-	{% endfor %}
+	<section id="files">
+		{% for file in files %}
+			<p>
+				{% if file[-4:4] == '.png' or file[-4:4] == '.jpg' or file[-4:4] == '.svg' or file[-4:4] == '.jpeg' or file[-4:4] == '.gif' %}
+					<img src="{{ path('assets') }}/images/{{ file }}" alt="{{ file }}">
+				{% else %}
+					<span>{{ file }}</span>
+				{% endif %}
+				<a href="{{ path('admin_files') }}?delete={{ file }}"><i class="material-icons">clear</i></a>
+			</p>
+		{% endfor %}
+	</section>
 
 {% endblock %}

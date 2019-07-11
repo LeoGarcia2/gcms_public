@@ -226,3 +226,35 @@ section#wrapper main section#gcms_page table, thead, tbody, tr, th, td{
 section#wrapper main section#gcms_page th, td{
 	padding: 20px;
 }
+section#wrapper main section#gcms_page section#files{
+	display: flex;
+	flex-wrap: wrap;
+}
+section#wrapper main section#gcms_page section#files p{
+	width: 200px;
+	height: 200px;
+	overflow-y: hidden;
+	margin: 20px;
+	border: 1px solid #000;
+	position: relative;
+}
+section#wrapper main section#gcms_page section#files p img{
+	width: 100%;
+}
+section#wrapper main section#gcms_page section#files p span{
+	display: block;
+	margin-top: 50px;
+}
+section#wrapper main section#gcms_page section#files p a{
+	position: absolute;
+	display: block;
+	top: 0;
+	right: 0;
+	width: 40px;
+	height: 40px;
+	color: #dd2222;
+	cursor: pointer;
+}
+section#wrapper main section#gcms_page section#files p a i{
+	font-size: 40px;
+}
