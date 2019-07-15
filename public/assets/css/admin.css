@@ -164,6 +164,15 @@ section#wrapper main section#gcms_menu nav section.dropdown section.submenu{
 section#wrapper main section#gcms_menu nav section.dropdown:hover section.submenu{	
 	display: block;
 }
+section#wrapper main section#gcms_menu nav section.dropdown > a{
+	padding: 0;
+	width: 100%;
+	height: 100%;
+}
+section#wrapper main section#gcms_menu nav section.dropdown:hover > a{
+	background-color: #000;
+	color: #ddd;
+}
 footer{
 	display: flex;
 	justify-content: center;

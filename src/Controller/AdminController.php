@@ -466,7 +466,7 @@ class AdminController extends AbstractController
             $cC->createEntity($kernel, $entity_name);
             return $this->redirectToRoute('fields_contenttype', ['contenttype' => $entity_name]);
         }else{
-            return $this->render('admin/new_ct.html.twig');
+            return $this->redirectToRoute('admin_contenttypes');
         }
     }
 
