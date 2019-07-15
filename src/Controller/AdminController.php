@@ -457,7 +457,17 @@ class AdminController extends AbstractController
     }
 
     /**
-     * Route("/admin/contenttypes/delete/{ct}", name="admin_delete_contenttype")
+     * @Route("/admin/contenttype/{ct}", name="admin_contenttype")
+     */
+    public function contenttype($ct)
+    {
+        return $this->render('admin/contenttype.html.twig', [
+            'ct' => $ct,
+        ]);
+    }
+
+    /**
+     * @Route("/admin/contenttypes/delete/{ct}", name="admin_delete_contenttype")
      */
     public function delete_contenttype($ct){
         $em = $this->getDoctrine()->getManager();
@@ -473,6 +483,7 @@ class AdminController extends AbstractController
         unlink('../src/Repository/'.$ct.'Repository.php');
         unlink('../templates/theme/entries/'.strtolower($ct).'/entry.html.twig');
         unlink('../templates/theme/entries/'.strtolower($ct).'/listing.html.twig');
+        rmdir('../templates/theme/entries/'.strtolower($ct));
         
         $em->flush();
 
@@ -534,7 +545,9 @@ class AdminController extends AbstractController
             $formFile = preg_replace("#'data_class' => ".$contenttypeName."::class,#", "'data_class' => ".$contenttypeName."::class,\n            'allow_extra_fields' => true", $formFile);
             file_put_contents('../src/Form/'.$contenttypeName.'Type.php', '<?php'.$formFile);
 
-            return new Response('ct made');
+            return $this->redirectToRoute('admin_contenttype', [
+                'ct' => $contenttypeName,
+            ]);
         }
 
         $contenttype = file_get_contents('../src/Entity/'.$contenttypeName.'.php');
