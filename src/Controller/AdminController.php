@@ -500,11 +500,12 @@ class AdminController extends AbstractController
     public function delete_contenttype($ct){
         $em = $this->getDoctrine()->getManager();
 
-        $entitiesToDelete = $em->getRepository('App\Entity\\'.$ct)->findAll();
+        //DECOMMENTER ENSUITE
+        // $entitiesToDelete = $em->getRepository('App\Entity\\'.$ct)->findAll();
 
-        foreach($entitiesToDelete as $entityToDelete){
-            $em->remove($entityToDelete);
-        }
+        // foreach($entitiesToDelete as $entityToDelete){
+        //     $em->remove($entityToDelete);
+        // }
 
         unlink('../src/Entity/'.$ct.'.php');
         unlink('../src/Form/'.$ct.'Type.php');

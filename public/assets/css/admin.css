@@ -270,3 +270,24 @@ section#wrapper main section#gcms_page section#files p a{
 section#wrapper main section#gcms_page section#files p a i{
 	font-size: 40px;
 }
+section#wrapper main section#gcms_page section.contenttype{
+	display: flex;
+	align-items: center;
+}
+section#wrapper main section#gcms_page section.contenttype > a:last-child{
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	margin-left: auto;
+}
+section#wrapper main section#gcms_page section.contenttype > a:last-child, button{
+	color: #000;
+	border: 1px solid #aaa;
+	background-color: #dedede;
+	text-decoration: none;
+	cursor: pointer;
+}
+section#wrapper main section#gcms_page section.contenttype > a:last-child:hover, button:hover{
+	border: 1px solid #07f;
+	background-color: #eef;
+}
