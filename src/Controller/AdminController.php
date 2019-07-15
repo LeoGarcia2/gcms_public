@@ -250,7 +250,7 @@ class AdminController extends AbstractController
     /**
      * @Route("/admin/pages", name="admin_pages")
      */
-    public function pages(Request $request)
+    public function pages(Request $request, ConsoleController $cC, KernelInterface $kernel)
     {
         $em = $this->getDoctrine()->getManager();
 
@@ -291,6 +291,7 @@ class AdminController extends AbstractController
                         $pageController = preg_replace("#\/\/".strtolower($rawName)."start([\s\S]*)\/\/".strtolower($rawName)."end#", "", $pageController);
                         file_put_contents('../src/Controller/PageController.php', $pageController);
                     }
+                    $cC->fullMigration($kernel);
                     break;
             }
             $em->flush();
@@ -558,7 +559,7 @@ class AdminController extends AbstractController
     /**
      * @Route("/admin/contenttypes/delete/{ct}", name="admin_delete_contenttype")
      */
-    public function delete_contenttype($ct){
+    public function delete_contenttype($ct, ConsoleController $cC, KernelInterface $kernel){
         $em = $this->getDoctrine()->getManager();
 
         $entitiesToDelete = $em->getRepository('App\Entity\\'.$ct)->findAll();
@@ -573,6 +574,8 @@ class AdminController extends AbstractController
         unlink('../templates/theme/entries/'.strtolower($ct).'/entry.html.twig');
         unlink('../templates/theme/entries/'.strtolower($ct).'/listing.html.twig');
         rmdir('../templates/theme/entries/'.strtolower($ct));
+
+        $cC->fullMigration($kernel);
         
         $em->flush();
 
