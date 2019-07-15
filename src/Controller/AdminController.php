@@ -457,7 +457,7 @@ class AdminController extends AbstractController
     }
 
     /**
-     * @Route("/admin/contenttype/{ct}", name="admin_contenttype")
+     * @Route("/admin/contenttypes/{ct}", name="admin_contenttype")
      */
     public function contenttype($ct)
     {
