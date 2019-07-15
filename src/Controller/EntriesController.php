@@ -20,7 +20,7 @@ class EntriesController extends AbstractController
         $repo = $em->getRepository('App\Entity\\'.$ct);
 
         $allEntriesQuery = $repo->createQueryBuilder('e')
-            ->where('e.published == :published')
+            ->where('e.published = :published')
             ->setParameter('published', true)
             ->getQuery();
 

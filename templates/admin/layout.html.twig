@@ -55,7 +55,7 @@
 				<hr>
 				<section class="dropdown">Config <span></span>
 					<section class="submenu">
-						<a href="#">Routes</a>
+						<a href="{{ path('admin_routes') }}">Routes</a>
 						<a href="{{ path('admin_taxonomy') }}">Taxonomy</a>
 						<a href="#">Translations</a>
 						<a href="{{ path('admin_cacheclear', { lastRoute: app.request.get('_route') }) }}">Clear cache</a>
@@ -65,8 +65,6 @@
 					</section>
 				</section>
 				<a href="{{ path('admin_files') }}">Files</a>
-				<a href="#">Themes</a>
-				<a href="#">Extensions</a>
 
 			</nav>
 

@@ -22,6 +22,32 @@ class AdminController extends AbstractController
     }
 
     /**
+     * @Route("/admin/routes", name="admin_routes")
+     */
+    public function routes()
+    {
+        $pagesRoutes = [];
+        $entriesRoutes = [];
+        $pageController = file_get_contents('../src/Controller/PageController.php');
+        preg_match_all('#\* @Route\(\"(.*)",#', $pageController, $pagesRoutesTmp);
+        foreach($pagesRoutesTmp[0] as $prTmp){
+            $pagesRoutes[] = substr($prTmp, 10, -2);
+        }
+        $entities = scandir('../src/Entity');
+        foreach($entities as $entity){
+            if(preg_match_all('#^(CT)(.)*#', $entity)){
+                $entity = substr($entity, 2, -4);
+                $entriesRoutes[] = $entity;
+            }
+        }
+        
+        return $this->render('admin/routes.html.twig', [
+            'pagesRoutes' => $pagesRoutes,
+            'entriesRoutes' => $entriesRoutes
+        ]);
+    }
+
+    /**
      * @Route("/admin/clearcache/{lastRoute}", name="admin_cacheclear")
      */
     public function cacheClear(ConsoleController $cC, KernelInterface $kernel, $lastRoute)
@@ -275,7 +301,7 @@ class AdminController extends AbstractController
         $entities = scandir('../src/Entity');
         foreach($entities as $entity){
             if(preg_match_all('#^(Page)(.)*#', $entity)){
-                $entity = substr($entity, 0, strlen($entity) - 4);
+                $entity = substr($entity, 0, -4);
                 $entitiesPage[] = $entity;
             }
         }
@@ -448,7 +474,7 @@ class AdminController extends AbstractController
         $entities = scandir('../src/Entity');
         foreach($entities as $entity){
             if(preg_match_all('#^(CT)(.)*#', $entity)){
-                $entity = substr($entity, 0, strlen($entity) - 4);
+                $entity = substr($entity, 0, -4);
                 $entitiesCT[] = $entity;
             }
         }

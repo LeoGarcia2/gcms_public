@@ -1,0 +1,27 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{# Put the page's title here, use {{ parent() }} to get your site's name #}{% endblock %}
+
+{% block stylesheets %}{# Put the page's CSS stylesheets here #}{% endblock %}
+
+{% block body %}
+
+<h2>{{ ctWithoutCT }}</h2>
+
+{% for entry in entries %}
+
+<p><a href="{{ path('entry', {ctWithoutCT: ctWithoutCT, id: entry.id}) }}">{{ entry.displayName }}</a></p>
+
+{% endfor %}
+        
+<div class="navigation">
+    {{ knp_pagination_render(entries) }}
+</div>
+
+{% endblock %}
+
+{% block javascripts %}
+{# Put the page's CSS stylesheets here #}
+{# Uncomment the next line to load jQuery from base.html.twig #}
+{# {{ parent() }} #}
+{% endblock %}

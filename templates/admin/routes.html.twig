@@ -1,0 +1,15 @@
+{% extends 'admin/layout.html.twig' %}
+
+{% block gcms_page %}
+<h2>Routes of your pages</h2>
+	{% for route in pagesRoutes %}
+		<p><a href="{{ route }}">{{ route }}</a></p>
+	{% endfor %}
+
+<h2>Routes of your content types</h2>
+	{% for route in entriesRoutes %}
+		<h3>Content type : CT{{ route }}</h3>
+		<p>Listing : <a href="/{{ route }}">/{{ route }}</a></p>
+		<p>Entry : /{{ route }}/{id}</p>
+	{% endfor %}
+{% endblock %}
