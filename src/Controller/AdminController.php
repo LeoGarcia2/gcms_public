@@ -237,6 +237,8 @@ class AdminController extends AbstractController
                     $repoForControl = $em->getRepository('App\Entity\\'.$pageToControl);
                     $entitiesToUpdate[] = $repoForControl->findAll()[0];
                 }else{
+                    $entityToDelete = $em->getRepository('App\Entity\\'.$pageToControl)->findAll()[0];
+                    $em->remove($entityToDelete);
                     $rawNames[] = $pageToControl;
                 }
             }
@@ -434,7 +436,48 @@ class AdminController extends AbstractController
             'pageName' => $page,
             'entity' => $entity,
         ]);
-    }  
+    }
+
+    /**
+     * @Route("/admin/contenttypes", name="admin_contenttypes")
+     */
+    public function contenttypes()
+    {
+        $entitiesCT = [];
+        $entities = scandir('../src/Entity');
+        foreach($entities as $entity){
+            if(preg_match_all('#^(CT)(.)*#', $entity)){
+                $entity = substr($entity, 0, strlen($entity) - 4);
+                $entitiesCT[] = $entity;
+            }
+        }
+        return $this->render('admin/contenttypes.html.twig', [
+            'ctE' => $entitiesCT,
+        ]);
+    }
+
+    /**
+     * Route("/admin/contenttypes/delete/{id}", name="admin_delete_contenttype")
+     */
+    public function delete_contenttype(){
+        $em = $this->getDoctrine()->getManager();
+
+        $entitiesToDelete = $em->getRepository('App\Entity\\'.$_POST['ct_to_remove'])->findAll();
+
+        foreach($entitiesToDelete as $entityToDelete){
+            $em->remove($entityToDelete);
+        }
+
+        unlink('../src/Entity/'.$_POST['ct_to_remove'].'.php');
+        unlink('../src/Form/'.$_POST['ct_to_remove'].'Type.php');
+        unlink('../src/Repository/'.$_POST['ct_to_remove'].'Repository.php');
+        unlink('../templates/theme/entries/'.strtolower($_POST['ct_to_remove']).'/entry.html.twig');
+        unlink('../templates/theme/entries/'.strtolower($_POST['ct_to_remove']).'/listing.html.twig');
+        
+        $em->flush();
+
+        return $this->redirectToRoute('admin_contenttypes');
+    }
 
     /**
      * @Route("/admin/contenttype/new", name="admin_new_contenttype")
@@ -474,6 +517,8 @@ class AdminController extends AbstractController
             $template = preg_replace('#fieldsHere#', $contenttypeFields, $template);
             mkdir('../templates/theme/entries/'.strtolower($contenttypeName));
             file_put_contents('../templates/theme/entries/'.strtolower($contenttypeName).'/entry.html.twig', $template);
+
+            file_put_contents('../templates/theme/entries/'.strtolower($contenttypeName).'/listing.html.twig', file_get_contents('../templates/theme/entries/list_default.html.twig'););
 
             $formFile = file_get_contents('../src/Form/'.$contenttypeName.'Type.php');
             $formFile = substr($formFile, 5);
