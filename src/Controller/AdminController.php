@@ -296,8 +296,10 @@ class AdminController extends AbstractController
     	if(isset($_POST['entity_name']) && $_POST['entity_name'] != ''){
     		$entity_name = 'Page'.ucfirst($_POST['entity_name']);
     		$cC->createEntity($kernel, $entity_name);
-    	}
-        return $this->redirectToRoute('fields_page', ['page' => $entity_name]);
+            return $this->redirectToRoute('fields_page', ['page' => $entity_name]);
+    	}else{
+            return $this->redirectToRoute('admin_pages');
+        }
     }
 
     /**
@@ -431,6 +433,71 @@ class AdminController extends AbstractController
         return $this->render('admin/page.html.twig', [
             'pageName' => $page,
             'entity' => $entity,
+        ]);
+    }  
+
+    /**
+     * @Route("/admin/contenttype/new", name="admin_new_contenttype")
+     */
+    public function new_contenttype(ConsoleController $cC, KernelInterface $kernel)
+    {
+        if(isset($_POST['entity_name']) && $_POST['entity_name'] != ''){
+            $entity_name = 'CT'.ucfirst($_POST['entity_name']);
+            $cC->createEntity($kernel, $entity_name);
+            return $this->redirectToRoute('fields_contenttype', ['contenttype' => $entity_name]);
+        }else{
+            return $this->render('admin/new_ct.html.twig');
+        }
+    }
+
+    /**
+     * @Route("/admin/contenttype/fields/{contenttype}", name="fields_contenttype")
+     */
+    public function fields_contenttype(Request $request, ConsoleController $cC, KernelInterface $kernel, $contenttype)
+    {
+        $contenttypeName = $contenttype;
+
+        if($request->isMethod('post')){
+            file_put_contents('../src/Entity/'.$contenttypeName.'.php', $_POST['pageArea']);
+
+            $cC->regenerateEntity($kernel, $contenttypeName);
+            $cC->createEntityForm($kernel, $contenttypeName);
+            $cC->fullMigration($kernel);
+
+            $template = file_get_contents('../templates/theme/entries/gcms_default.html.twig');
+            $contenttypeFields = '';
+
+            foreach($_POST['contenttypeFields'] as $field){
+                $contenttypeFields .= "<section>{{ ct.".$field." }}</section>\n    ";
+            }
+
+            $template = preg_replace('#fieldsHere#', $contenttypeFields, $template);
+            mkdir('../templates/theme/entries/'.strtolower($contenttypeName));
+            file_put_contents('../templates/theme/entries/'.strtolower($contenttypeName).'/entry.html.twig', $template);
+
+            $formFile = file_get_contents('../src/Form/'.$contenttypeName.'Type.php');
+            $formFile = substr($formFile, 5);
+            $formFile = preg_replace("#namespace App\\\Form;#", "namespace App\\\Form;\n\nuse Vich\\\UploaderBundle\\\Form\\\Type\\\VichFileType;", $formFile);
+
+
+            if(isset($_POST['imageFields'])){
+                foreach($_POST['imageFields'] as $field){
+                    $formFile = preg_replace("#->add\('".$field."'\)#", "->add('".$field."File', VichFileType::class)", $formFile);
+                }
+            }                
+
+            $formFile = preg_replace("#'data_class' => ".$contenttypeName."::class,#", "'data_class' => ".$contenttypeName."::class,\n            'allow_extra_fields' => true", $formFile);
+            file_put_contents('../src/Form/'.$contenttypeName.'Type.php', '<?php'.$formFile);
+
+            //return $this->redirectToRoute('generic_form', [ 'page' => $contenttypeName ]);
+            return new Response('ct made');
+        }
+
+        $contenttype = file_get_contents('../src/Entity/'.$contenttypeName.'.php');
+
+        return $this->render('admin/ct_fields.html.twig', [
+            'ctName' => $contenttypeName,
+            'ct' => $contenttype,
         ]);
     }
 }

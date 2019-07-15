@@ -1,0 +1,15 @@
+{% extends 'admin/layout.html.twig' %}
+
+{% block gcms_page %}
+
+	<h1>Create a new content type</h1>
+
+	<form id="new" method="post" action="{{ path('admin_new_contenttype') }}">
+
+		<input type="text" name="entity_name" placeholder="Content type's name" required>
+
+		<button type="submit" title="Create new content type"><i class="material-icons">fiber_new</i></button>
+
+	</form>
+
+{% endblock %}
