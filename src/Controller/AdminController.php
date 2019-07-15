@@ -457,22 +457,22 @@ class AdminController extends AbstractController
     }
 
     /**
-     * Route("/admin/contenttypes/delete/{id}", name="admin_delete_contenttype")
+     * Route("/admin/contenttypes/delete/{ct}", name="admin_delete_contenttype")
      */
-    public function delete_contenttype(){
+    public function delete_contenttype($ct){
         $em = $this->getDoctrine()->getManager();
 
-        $entitiesToDelete = $em->getRepository('App\Entity\\'.$_POST['ct_to_remove'])->findAll();
+        $entitiesToDelete = $em->getRepository('App\Entity\\'.$ct)->findAll();
 
         foreach($entitiesToDelete as $entityToDelete){
             $em->remove($entityToDelete);
         }
 
-        unlink('../src/Entity/'.$_POST['ct_to_remove'].'.php');
-        unlink('../src/Form/'.$_POST['ct_to_remove'].'Type.php');
-        unlink('../src/Repository/'.$_POST['ct_to_remove'].'Repository.php');
-        unlink('../templates/theme/entries/'.strtolower($_POST['ct_to_remove']).'/entry.html.twig');
-        unlink('../templates/theme/entries/'.strtolower($_POST['ct_to_remove']).'/listing.html.twig');
+        unlink('../src/Entity/'.$ct.'.php');
+        unlink('../src/Form/'.$ct.'Type.php');
+        unlink('../src/Repository/'.$ct.'Repository.php');
+        unlink('../templates/theme/entries/'.strtolower($ct).'/entry.html.twig');
+        unlink('../templates/theme/entries/'.strtolower($ct).'/listing.html.twig');
         
         $em->flush();
 
@@ -518,7 +518,7 @@ class AdminController extends AbstractController
             mkdir('../templates/theme/entries/'.strtolower($contenttypeName));
             file_put_contents('../templates/theme/entries/'.strtolower($contenttypeName).'/entry.html.twig', $template);
 
-            file_put_contents('../templates/theme/entries/'.strtolower($contenttypeName).'/listing.html.twig', file_get_contents('../templates/theme/entries/list_default.html.twig'););
+            file_put_contents('../templates/theme/entries/'.strtolower($contenttypeName).'/listing.html.twig', file_get_contents('../templates/theme/entries/list_default.html.twig'));
 
             $formFile = file_get_contents('../src/Form/'.$contenttypeName.'Type.php');
             $formFile = substr($formFile, 5);

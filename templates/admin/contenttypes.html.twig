@@ -1,0 +1,23 @@
+{% extends 'admin/layout.html.twig' %}
+
+{% block gcms_page %}
+
+<h1>Content types</h1>
+
+<a href="{{ path('admin_new_contenttype') }}">New content type</a>
+
+<hr>
+	
+	{% for ct in ctE %}
+
+	<section class="contenttype">
+
+		<p>{{ ct }}</p>
+		
+	</section>
+
+	{% endfor %}
+
+</form>
+
+{% endblock %}
