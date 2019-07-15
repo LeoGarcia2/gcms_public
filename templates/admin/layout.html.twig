@@ -48,7 +48,7 @@
 				<a href="{{ path('admin_pages') }}">Pages</a>
 				<section class="dropdown"><a href="{{ path('admin_contenttypes') }}">Entries</a> <span></span>
 					<section class="submenu">
-						<p>No content type yet</p>
+						{{ render(controller('App\\Controller\\AdminController::list_contenttypes')) }}
 					</section>
 				</section>
 				<a href="#">Components</a>

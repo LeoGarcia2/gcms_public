@@ -456,6 +456,20 @@ class AdminController extends AbstractController
         ]);
     }
 
+    public function list_contenttypes(){
+        $entitiesCT = [];
+        $entities = scandir('../src/Entity');
+        foreach($entities as $entity){
+            if(preg_match_all('#^(CT)(.)*#', $entity)){
+                $entity = substr($entity, 0, strlen($entity) - 4);
+                $entitiesCT[] = $entity;
+            }
+        }
+        return $this->render('admin/list_contenttypes.html.twig', [
+            'cts' => $entitiesCT,
+        ]);
+    }
+
     /**
      * @Route("/admin/contenttypes/new", name="admin_new_contenttype")
      */
