@@ -4,15 +4,47 @@
 
 <h1>{{ ct }}</h1>
 
-<a href="{{ path('admin_new_entry') }}"><i class="material-icons">fiber_new</i></a>
-<section class="entries">
+<p class="center-v">
+	New entry
+	<a class="black_link" href="{{ path('admin_new_entry', { ct: ct }) }}"><i class="material-icons">fiber_new</i></a>
+</p>
+
+<form id="listing" method="post" action="{{ path('admin_contenttype', { ct: ct }) }}">
+
+	<section id="controls">
+		<input type="radio" name="controls" id="publish" value="publish" checked>
+		<label for="publish">Publish</label>
+		<input type="radio" name="controls" id="unpublish" value="unpublish">
+		<label for="unpublish">Unpublish</label>
+		<input type="radio" name="controls" id="delete" value="delete">
+		<label for="delete">Delete</label>
+		<button type="submit">Execute</button>
+	</section>
+
+	<hr>
 	
 	{% for entry in entries %}
-		<p>{{ entry.displayName }}</p>
+
+	<section class="entry">
+		
+		<p><input type="checkbox" name="entries[]" value="{{ entry.id }}"></p>
+		<p><a href="{{ path('admin_new_entry', { ct: ct, id: entry.id }) }}">{{ entry.displayName }}</a></p>
+		<p>Created by {{ entry.author }}</p>
+		<p>At {{ entry.updatedAt|date('Y/m/d') }}</p>
+		{% if entry.published == true %}
+			<p>Published <i class="material-icons">check_box</i></p>
+		{% else %}
+			<p>Published <i class="material-icons">indeterminate_check_box</i></p>
+		{% endif %}
+
+	</section>
+
 	{% else %}
+
 		<p>No entry for this content type yet.</p>
+
 	{% endfor %}
 
-</section>
+</form>
 
 {% endblock %}

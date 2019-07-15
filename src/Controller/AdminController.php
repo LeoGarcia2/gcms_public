@@ -393,6 +393,7 @@ class AdminController extends AbstractController
         $form = $this->createForm($formConst, $entity);
         $form->add('Save', SubmitType::class);
         $form->remove('author');
+        $form->remove('published');
         $form->remove('updatedAt');
 
         $form->handleRequest($request);
@@ -578,22 +579,26 @@ class AdminController extends AbstractController
     }
 
     /**
-     * @Route("/admin/{ct}/entries/new", name="admin_new_entry")
+     * @Route("/admin/{ct}/entries/new/{id}", name="admin_new_entry")
      */
-    public function new_entry(Request $request, $ct)
+    public function new_entry(Request $request, $ct, $id = null)
     {
         $classConst = 'App\Entity\\'.$ct;
         $formConst = 'App\Form\\'.$ct.'Type';
         $em = $this->getDoctrine()->getManager();
         $repo = $em->getRepository($classConst);
 
-        $entity = new $classConst();
-
-        $entity->setPublished(true);
+        if($id === null){
+            $entity = new $classConst();
+            $entity->setPublished(true);
+        }else{
+            $entity = $repo->findOneById($id);
+        }
 
         $form = $this->createForm($formConst, $entity);
         $form->add('Save', SubmitType::class);
         $form->remove('author');
+        $form->remove('published');
         $form->remove('updatedAt');
 
         $form->handleRequest($request);
