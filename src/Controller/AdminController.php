@@ -571,7 +571,7 @@ class AdminController extends AbstractController
             $contenttypeFields = '';
 
             foreach($_POST['contenttypeFields'] as $field){
-                $contenttypeFields .= "<section>{{ ct.".$field." }}</section>\n    ";
+                $contenttypeFields .= "<section>{{ entry.".$field." }}</section>\n    ";
             }
 
             $template = preg_replace('#fieldsHere#', $contenttypeFields, $template);

@@ -10,17 +10,25 @@ use Symfony\Component\HttpFoundation\Response;
 class EntriesController extends AbstractController
 {
     /**
-     * @Route("/{contentType}", name="listing")
+     * @Route("/{ctWithoutCT}", name="listing")
      */
-    public function listing(Request $request, $contentType)
+    public function listing(Request $request, $ctWithoutCT)
     {
-        return new Response($contentType);
+        return new Response($ctWithoutCT);
     }
     /**
-     * @Route("/{contentType}/{id}", name="entry", requirements={"id"="\d+"})
+     * @Route("/{ctWithoutCT}/{id}", name="entry", requirements={"id"="\d+"})
      */
-    public function entry(Request $request, $contentType, $id)
+    public function entry(Request $request, $ctWithoutCT, $id)
     {
-        return new Response($contentType." ".$id);
+        $ct = 'CT'.$ctWithoutCT;
+        $em = $this->getDoctrine()->getManager();
+        $repo = $em->getRepository('App\Entity\\'.$ct);
+        $entry = $repo->findOneById($id);
+
+        return $this->render('theme/entries/'.strtolower($ct).'/entry.html.twig', [
+            'ct' => $ct,
+            'entry' => $entry,
+        ]);
     }
 }
