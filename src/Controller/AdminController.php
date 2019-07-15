@@ -457,6 +457,20 @@ class AdminController extends AbstractController
     }
 
     /**
+     * @Route("/admin/contenttypes/new", name="admin_new_contenttype")
+     */
+    public function new_contenttype(ConsoleController $cC, KernelInterface $kernel)
+    {
+        if(isset($_POST['entity_name']) && $_POST['entity_name'] != ''){
+            $entity_name = 'CT'.ucfirst($_POST['entity_name']);
+            $cC->createEntity($kernel, $entity_name);
+            return $this->redirectToRoute('fields_contenttype', ['contenttype' => $entity_name]);
+        }else{
+            return $this->render('admin/new_ct.html.twig');
+        }
+    }
+
+    /**
      * @Route("/admin/contenttypes/{ct}", name="admin_contenttype")
      */
     public function contenttype($ct)
@@ -491,21 +505,7 @@ class AdminController extends AbstractController
     }
 
     /**
-     * @Route("/admin/contenttype/new", name="admin_new_contenttype")
-     */
-    public function new_contenttype(ConsoleController $cC, KernelInterface $kernel)
-    {
-        if(isset($_POST['entity_name']) && $_POST['entity_name'] != ''){
-            $entity_name = 'CT'.ucfirst($_POST['entity_name']);
-            $cC->createEntity($kernel, $entity_name);
-            return $this->redirectToRoute('fields_contenttype', ['contenttype' => $entity_name]);
-        }else{
-            return $this->render('admin/new_ct.html.twig');
-        }
-    }
-
-    /**
-     * @Route("/admin/contenttype/fields/{contenttype}", name="fields_contenttype")
+     * @Route("/admin/contenttypes/fields/{contenttype}", name="fields_contenttype")
      */
     public function fields_contenttype(Request $request, ConsoleController $cC, KernelInterface $kernel, $contenttype)
     {
