@@ -5,8 +5,19 @@
 {% block stylesheets %}{# Put the page's CSS stylesheets here #}{% endblock %}
 
 {% block body %}
-	{# See templates/admin/page.html.twig to learn how to display images and dates fields correctly #}
-	fieldsHere
+
+<h2>{{ ctWithoutCT }}</h2>
+
+{% for entry in entries %}
+
+<p><a href="{{ path('entry', {ctWithoutCT: ctWithoutCT, id: entry.id}) }}">{{ entry.displayName }}</a></p>
+
+{% endfor %}
+        
+<div class="navigation">
+    {{ knp_pagination_render(entries) }}
+</div>
+
 {% endblock %}
 
 {% block javascripts %}
