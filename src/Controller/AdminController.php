@@ -488,11 +488,40 @@ class AdminController extends AbstractController
     /**
      * @Route("/admin/contenttypes/{ct}", name="admin_contenttype")
      */
-    public function contenttype($ct)
+    public function contenttype(Request $request, $ct)
     {
         $em = $this->getDoctrine()->getManager();
+        $repo = $em->getRepository('App\Entity\\'.$ct);
 
-        $entries = $em->getRepository('App\Entity\\'.$ct)->findAll();
+        if($request->isMethod('post')){
+            $entitiesToUpdate = [];
+            foreach($_POST['entries'] as $entry)
+            {
+                $entitiesToUpdate[] = $repo->findOneById($entry);
+            }
+            switch($_POST['controls']){
+                case 'publish':
+                    foreach($entitiesToUpdate as $entityToControl){
+                        $entityToControl->setPublished(true);
+                        $em->persist($entityToControl);
+                    }
+                    break;
+                case 'unpublish':
+                    foreach($entitiesToUpdate as $entityToControl){
+                        $entityToControl->setPublished(false);
+                        $em->persist($entityToControl);
+                    }
+                    break;
+                case 'delete':
+                    foreach($entitiesToUpdate as $entityToControl){
+                        $em->remove($entityToControl);
+                    }
+                    break;
+            }
+            $em->flush();
+        }
+
+        $entries = $repo->findAll();
 
         return $this->render('admin/contenttype.html.twig', [
             'ct' => $ct,
