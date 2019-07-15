@@ -458,7 +458,7 @@ class AdminController extends AbstractController
         $contenttypeName = $contenttype;
 
         if($request->isMethod('post')){
-            file_put_contents('../src/Entity/'.$contenttypeName.'.php', $_POST['pageArea']);
+            file_put_contents('../src/Entity/'.$contenttypeName.'.php', $_POST['contenttypeArea']);
 
             $cC->regenerateEntity($kernel, $contenttypeName);
             $cC->createEntityForm($kernel, $contenttypeName);
@@ -489,7 +489,6 @@ class AdminController extends AbstractController
             $formFile = preg_replace("#'data_class' => ".$contenttypeName."::class,#", "'data_class' => ".$contenttypeName."::class,\n            'allow_extra_fields' => true", $formFile);
             file_put_contents('../src/Form/'.$contenttypeName.'Type.php', '<?php'.$formFile);
 
-            //return $this->redirectToRoute('generic_form', [ 'page' => $contenttypeName ]);
             return new Response('ct made');
         }
 
