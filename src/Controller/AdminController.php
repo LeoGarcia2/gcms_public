@@ -271,14 +271,14 @@ class AdminController extends AbstractController
         }
 
         $pages = [];
-    	$entitiesPage = [];
-    	$entities = scandir('../src/Entity');
-    	foreach($entities as $entity){
-    		if(preg_match_all('#^(Page)(.)*#', $entity)){
-    			$entity = substr($entity, 0, strlen($entity) - 4);
-    			$entitiesPage[] = $entity;
-    		}
-    	}
+        $entitiesPage = [];
+        $entities = scandir('../src/Entity');
+        foreach($entities as $entity){
+            if(preg_match_all('#^(Page)(.)*#', $entity)){
+                $entity = substr($entity, 0, strlen($entity) - 4);
+                $entitiesPage[] = $entity;
+            }
+        }
         foreach($entitiesPage as $entityPage){
             $classConst = 'App\Entity\\'.$entityPage;
             $repo = $em->getRepository($classConst);
@@ -295,11 +295,11 @@ class AdminController extends AbstractController
      */
     public function new_page(ConsoleController $cC, KernelInterface $kernel)
     {
-    	if(isset($_POST['entity_name']) && $_POST['entity_name'] != ''){
-    		$entity_name = 'Page'.ucfirst($_POST['entity_name']);
-    		$cC->createEntity($kernel, $entity_name);
+        if(isset($_POST['entity_name']) && $_POST['entity_name'] != ''){
+            $entity_name = 'Page'.ucfirst($_POST['entity_name']);
+            $cC->createEntity($kernel, $entity_name);
             return $this->redirectToRoute('fields_page', ['page' => $entity_name]);
-    	}else{
+        }else{
             return $this->redirectToRoute('admin_pages');
         }
     }
@@ -309,13 +309,13 @@ class AdminController extends AbstractController
      */
     public function fields_page(Request $request, ConsoleController $cC, KernelInterface $kernel, $page)
     {
-    	$pageName = $page;
+        $pageName = $page;
 
-    	if($request->isMethod('post')){
+        if($request->isMethod('post')){
             file_put_contents('../src/Entity/'.$pageName.'.php', $_POST['pageArea']);
 
-    		$cC->regenerateEntity($kernel, $pageName);
-    		$cC->createEntityForm($kernel, $pageName);
+            $cC->regenerateEntity($kernel, $pageName);
+            $cC->createEntityForm($kernel, $pageName);
             $cC->fullMigration($kernel);
 
             $template = file_get_contents('../templates/theme/pages/gcms_default.html.twig');
@@ -359,14 +359,14 @@ class AdminController extends AbstractController
             $formFile = preg_replace("#'data_class' => ".$pageName."::class,#", "'data_class' => ".$pageName."::class,\n            'allow_extra_fields' => true", $formFile);
             file_put_contents('../src/Form/'.$pageName.'Type.php', '<?php'.$formFile);
 
-    		return $this->redirectToRoute('generic_form', [ 'page' => $pageName ]);
-    	}
+            return $this->redirectToRoute('generic_form', [ 'page' => $pageName ]);
+        }
 
-    	$page = file_get_contents('../src/Entity/'.$pageName.'.php');
+        $page = file_get_contents('../src/Entity/'.$pageName.'.php');
 
-    	return $this->render('admin/page_fields.html.twig', [
-    		'pageName' => $pageName,
-        	'page' => $page,
+        return $this->render('admin/page_fields.html.twig', [
+            'pageName' => $pageName,
+            'page' => $page,
         ]);
     }
 
@@ -580,7 +580,7 @@ class AdminController extends AbstractController
     /**
      * @Route("/admin/{ct}/entries/new", name="admin_new_entry")
      */
-    public function new_contenttype($ct)
+    public function new_entry(Request $request, $ct)
     {
         $classConst = 'App\Entity\\'.$ct;
         $formConst = 'App\Form\\'.$ct.'Type';
