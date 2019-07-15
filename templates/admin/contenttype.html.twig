@@ -4,4 +4,15 @@
 
 <h1>{{ ct }}</h1>
 
+<a href="{{ path('admin_new_entry') }}"><i class="material-icons">fiber_new</i></a>
+<section class="entries">
+	
+	{% for entry in entries %}
+		<p>{{ entry.displayName }}</p>
+	{% else %}
+		<p>No entry for this content type yet.</p>
+	{% endfor %}
+
+</section>
+
 {% endblock %}

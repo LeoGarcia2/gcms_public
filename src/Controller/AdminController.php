@@ -489,8 +489,13 @@ class AdminController extends AbstractController
      */
     public function contenttype($ct)
     {
+        $em = $this->getDoctrine()->getManager();
+
+        $entries = $em->getRepository('App\Entity\\'.$ct)->findAll();
+
         return $this->render('admin/contenttype.html.twig', [
             'ct' => $ct,
+            'entries' => $entries,
         ]);
     }
 
@@ -500,12 +505,11 @@ class AdminController extends AbstractController
     public function delete_contenttype($ct){
         $em = $this->getDoctrine()->getManager();
 
-        //DECOMMENTER ENSUITE
-        // $entitiesToDelete = $em->getRepository('App\Entity\\'.$ct)->findAll();
+        $entitiesToDelete = $em->getRepository('App\Entity\\'.$ct)->findAll();
 
-        // foreach($entitiesToDelete as $entityToDelete){
-        //     $em->remove($entityToDelete);
-        // }
+        foreach($entitiesToDelete as $entityToDelete){
+            $em->remove($entityToDelete);
+        }
 
         unlink('../src/Entity/'.$ct.'.php');
         unlink('../src/Form/'.$ct.'Type.php');
@@ -572,4 +576,44 @@ class AdminController extends AbstractController
             'ct' => $contenttype,
         ]);
     }
+
+    /**
+     * @Route("/admin/{ct}/entries/new", name="admin_new_entry")
+     */
+    public function new_contenttype($ct)
+    {
+        $classConst = 'App\Entity\\'.$ct;
+        $formConst = 'App\Form\\'.$ct.'Type';
+        $em = $this->getDoctrine()->getManager();
+        $repo = $em->getRepository($classConst);
+
+        $entity = new $classConst();
+
+        $entity->setPublished(true);
+
+        $form = $this->createForm($formConst, $entity);
+        $form->add('Save', SubmitType::class);
+        $form->remove('author');
+        $form->remove('updatedAt');
+
+        $form->handleRequest($request);
+
+        if($form->isSubmitted() && $form->isValid()){
+            $entity = $form->getData();
+            $entity->setAuthor($this->getUser()->getUsername());
+            $entity->setUpdatedAt(new \DateTime());
+            $em->persist($entity);
+            $em->flush();
+
+            return $this->redirectToRoute('admin_contenttype', [
+                'ct' => $ct,
+            ]);
+        }
+
+        return $this->render('admin/form.html.twig', [
+            'form' => $form->createView(),
+        ]);
+        
+    }
+
 }
