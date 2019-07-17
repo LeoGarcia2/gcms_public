@@ -334,8 +334,15 @@ class AdminController extends AbstractController
     /**
      * @Route("/admin/pages/fields/{page}", name="fields_page")
      */
-    public function fields_page(Request $request, ConsoleController $cC, KernelInterface $kernel, $page)
+    public function fields_page(Request $request, TaxonomyController $tC, ConsoleController $cC, KernelInterface $kernel, $page)
     {
+        $taxonomyGroups = [];
+        $reflection = new \ReflectionClass($tC);
+        $taxos = $reflection->getProperties(\ReflectionProperty::IS_PUBLIC);
+        foreach($taxos as $taxo){
+            $taxonomyGroups[] = $taxo->name;
+        }
+
         $pageName = $page;
 
         if($request->isMethod('post')){
@@ -394,6 +401,7 @@ class AdminController extends AbstractController
         return $this->render('admin/page_fields.html.twig', [
             'pageName' => $pageName,
             'page' => $page,
+            'taxoGroups' => $taxonomyGroups,
         ]);
     }
 
@@ -585,8 +593,15 @@ class AdminController extends AbstractController
     /**
      * @Route("/admin/contenttypes/fields/{contenttype}", name="fields_contenttype")
      */
-    public function fields_contenttype(Request $request, ConsoleController $cC, KernelInterface $kernel, $contenttype)
+    public function fields_contenttype(Request $request, TaxonomyController $tC, ConsoleController $cC, KernelInterface $kernel, $contenttype)
     {
+        $taxonomyGroups = [];
+        $reflection = new \ReflectionClass($tC);
+        $taxos = $reflection->getProperties(\ReflectionProperty::IS_PUBLIC);
+        foreach($taxos as $taxo){
+            $taxonomyGroups[] = $taxo->name;
+        }
+
         $contenttypeName = $contenttype;
 
         if($request->isMethod('post')){
@@ -633,6 +648,7 @@ class AdminController extends AbstractController
         return $this->render('admin/ct_fields.html.twig', [
             'ctName' => $contenttypeName,
             'ct' => $contenttype,
+            'taxoGroups' => $taxonomyGroups,
         ]);
     }
 

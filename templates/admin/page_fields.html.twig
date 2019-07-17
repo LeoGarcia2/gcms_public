@@ -49,6 +49,15 @@
 </table>
 
 <form action="{{ path('fields_page', { page: pageName }) }}" method="post">
+	{% if taxoGroups[0] is defined %}
+		<p>Taxonomies</p>
+		{% for group in taxoGroups %}
+			<p>
+				<input type="checkbox" name="taxo" id="{{ group }}" value="{{ group }}">
+				<label for="{{ group }}">{{ group | capitalize }}</label>
+			</p>
+		{% endfor %}
+	{% endif %}
 	<label for="pageRoute">The page adress (after yourdomain.com/)</label>
 	<input id="pageRoute" name="pageRoute" type="text">
 	<select id="pageFields" name="pageFields[]" style="display: none;" multiple></select>
@@ -134,6 +143,10 @@
 		let phpCode = $('#pageArea').val();
 		let content = '';
 		let imageType = '';
+		let taxo = [];
+		$('input[name=taxo]:checked').each(function(){
+			taxo.push($(this).val());
+		});
 
 		fields.forEach(function(value){
 
@@ -157,7 +170,6 @@
 			let element = '\n    /**\n     * @ORM\\Column(type="'+value.type+'", '+value.options+')';
 
 			element = element+'\n     */\n    private $'+nameForTemplate+';\n';
-			console.log(imageType);
 			if(imageType == 'image'){
 				element = element+'\n    /**\n     * @Vich\\UploadableField(mapping="images", fileNameProperty="'+nameForTemplate+'")\n     */\n    private $'+nameForTemplate+'File;\n    public function set'+nameForTemplate.charAt(0).toUpperCase()+nameForTemplate.slice(1)+'File(?File $'+nameForTemplate+'File = null): void\n    {\n        $this->'+nameForTemplate+'File = $'+nameForTemplate+'File;\n        if(null !== $'+nameForTemplate+'File){\n            $this->updatedAt = new \\Datetime();\n        }\n    }\n    public function get'+nameForTemplate.charAt(0).toUpperCase()+nameForTemplate.slice(1)+'File(): ?File\n    {\n        return $this->'+nameForTemplate+'File;\n    }\n';
 				imageType = '';
@@ -176,6 +188,10 @@
 		}
 
 		let baseFields = '    /**\n     * @ORM\\Column(type="string", length=255)\n     */\n    private $author;\n\n    /**\n     * @ORM\\Column(type="string", length=255)\n     */\n    private $displayName;\n\n    /**\n     * @ORM\\Column(type="datetime")\n     */\n    private $updatedAt;\n\n    /**\n     * @ORM\\Column(type="boolean")\n     */\n    private $published;\n';
+
+		for(let i = 0; i < taxo.length; i++){
+			baseFields += '\n    /**\n     * @ORM\\Column(type="json")\n     */\n    private $'+taxo[i]+';\n';
+		}
 
 		phpCode = phpCode.replace('private $id;', 'private $id;\n\n'+baseFields+content);
 		$('#pageArea').val(phpCode);
