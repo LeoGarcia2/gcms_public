@@ -294,7 +294,9 @@ class AdminController extends AbstractController
                     $cC->fullMigration($kernel);
                     break;
             }
-            $em->flush();
+            if($_POST['controls'] != 'delete'){
+                $em->flush();
+            }
         }
 
         $pages = [];
