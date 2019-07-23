@@ -190,7 +190,7 @@
 		let baseFields = '    /**\n     * @ORM\\Column(type="string", length=255)\n     */\n    private $author;\n\n    /**\n     * @ORM\\Column(type="string", length=255)\n     */\n    private $displayName;\n\n    /**\n     * @ORM\\Column(type="datetime")\n     */\n    private $updatedAt;\n\n    /**\n     * @ORM\\Column(type="boolean")\n     */\n    private $published;\n';
 
 		for(let i = 0; i < taxo.length; i++){
-			baseFields += '\n    /**\n     * @ORM\\Column(type="json")\n     */\n    private $'+taxo[i]+';\n';
+			baseFields += '\n    /**\n     * @ORM\\Column(type="json")\n     */\n    private $taxo'+taxo[i].charAt(0).toUpperCase()+taxo[i].slice(1)+';\n';
 		}
 
 		phpCode = phpCode.replace('private $id;', 'private $id;\n\n'+baseFields+content);

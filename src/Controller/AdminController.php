@@ -381,8 +381,13 @@ class AdminController extends AbstractController
 
             $formFile = file_get_contents('../src/Form/'.$pageName.'Type.php');
             $formFile = substr($formFile, 5);
-            $formFile = preg_replace("#namespace App\\\Form;#", "namespace App\\\Form;\n\nuse Vich\\\UploaderBundle\\\Form\\\Type\\\VichFileType;", $formFile);
+            $formFile = preg_replace("#namespace App\\\Form;#", "namespace App\\\Form;\n\nuse Vich\\\UploaderBundle\\\Form\\\Type\\\VichFileType;\nuse App\\\Controller\\\TaxonomyController;\nuse Symfony\\\Component\\\Form\Extension\\\Core\\\Type\\\ChoiceType;", $formFile);
 
+            $formFile = preg_replace("#        \\\$builder#", "        \$tC = new TaxonomyController();\n        \$builder", $formFile);
+
+            $formFile = preg_replace_callback("#->add\('taxo(.*)'\)#", function($matches){
+                return "->add('taxo".$matches[1]."', ChoiceType::class, [\n                'choices' => \$tC->".strtolower($matches[1]).",\n                'multiple' => true,\n                'choice_label'  => function(\$choice, \$key, \$value){\n                    return ucfirst(\$choice);\n                }\n            ])";
+            }, $formFile);
 
             if(isset($_POST['imageFields'])){
                 foreach($_POST['imageFields'] as $field){
@@ -626,8 +631,13 @@ class AdminController extends AbstractController
 
             $formFile = file_get_contents('../src/Form/'.$contenttypeName.'Type.php');
             $formFile = substr($formFile, 5);
-            $formFile = preg_replace("#namespace App\\\Form;#", "namespace App\\\Form;\n\nuse Vich\\\UploaderBundle\\\Form\\\Type\\\VichFileType;", $formFile);
+            $formFile = preg_replace("#namespace App\\\Form;#", "namespace App\\\Form;\n\nuse Vich\\\UploaderBundle\\\Form\\\Type\\\VichFileType;\nuse App\\\Controller\\\TaxonomyController;\nuse Symfony\\\Component\\\Form\Extension\\\Core\\\Type\\\ChoiceType;", $formFile);
 
+            $formFile = preg_replace("#        \\\$builder#", "        \$tC = new TaxonomyController();\n        \$builder", $formFile);
+
+            $formFile = preg_replace_callback("#->add\('taxo(.*)'\)#", function($matches){
+                return "->add('taxo".$matches[1]."', ChoiceType::class, [\n                'choices' => \$tC->".strtolower($matches[1]).",\n                'multiple' => true,\n                'choice_label'  => function(\$choice, \$key, \$value){\n                    return ucfirst(\$choice);\n                }\n            ])";
+            }, $formFile);
 
             if(isset($_POST['imageFields'])){
                 foreach($_POST['imageFields'] as $field){
