@@ -335,6 +335,24 @@ class AdminController extends AbstractController
     }
 
     /**
+     * @Route("/admin/components", name="admin_components")
+     */
+    public function components(Request $request){
+        $components = [];
+        $componentsController = file_get_contents('../src/Controller/ComponentsController.php');
+
+        preg_match_all('#function(.*)#', $componentsController, $componentsFunctions);
+
+        foreach($componentsFunctions[0] as $componentFunction){            
+            $components[] = substr($componentFunction, 9, -2);
+        }
+
+        return $this->render('admin/components.html.twig', [
+            'components' => $components
+        ]);
+    }
+
+    /**
      * @Route("/admin/pages", name="admin_pages")
      */
     public function pages(Request $request, ConsoleController $cC, KernelInterface $kernel)

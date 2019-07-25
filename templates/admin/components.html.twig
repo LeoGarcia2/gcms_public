@@ -1,0 +1,18 @@
+{% extends 'admin/layout.html.twig' %}
+
+{% block gcms_page %}
+
+<p>To create a new component, create a function within "src/Controller/ComponentsController.php", valid PHP and/or Symfony code is all you need to make a working component, the function should return either a Symfony\Component\HttpFoundation\Response object or a template rendering ($this->render()).</p>
+
+{% for component in components %}
+
+	<h3>Component's name : {{ component }}</h3>
+	<p>| Inclusion dans un template : {{'{{'}} render(controller('App\\Controller\\ComponentsController::{{ component }}')) {{'}}'}}</p>
+
+{% else %}
+
+	<p>No component yet.</p>	
+
+{% endfor %}
+	
+{% endblock %}

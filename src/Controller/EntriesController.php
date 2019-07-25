@@ -45,7 +45,14 @@ class EntriesController extends AbstractController
         $ct = 'CT'.$ctWithoutCT;
         $em = $this->getDoctrine()->getManager();
         $repo = $em->getRepository('App\Entity\\'.$ct);
-        $entry = $repo->findOneById($id);
+
+        $entry = $repo->createQueryBuilder('e')
+            ->where('e.id = :id')
+            ->setParameter('id', $id)
+            ->andWhere('e.published = :published')
+            ->setParameter('published', true)
+            ->getQuery()
+            ->getSingleResult();
 
         return $this->render('theme/entries/'.strtolower($ct).'/entry.html.twig', [
             'ct' => $ct,

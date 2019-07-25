@@ -14,7 +14,7 @@
 
 {% else %}
 
-	<p>No pages yet</p>
+	<p>No page yet.</p>
 
 {% endfor %}
 
@@ -26,14 +26,14 @@
 
 	<h3>Content type : CT{{ route }}</h3>
 	<p>Listing : <a href="/{{ route }}">/{{ route }}</a></p>
-	<p>| Inclusion dans un template : path('{{ listingsPath[idERoute] }})</p>
+	<p>| Inclusion dans un template : {{'{{'}} path('{{ listingsPath[idERoute] }}) {{'}}'}}</p>
 	<p>Entry : /{{ route }}/{id}</p>
-	<p>| Inclusion dans un template : path('{{ entriesPath[idERoute] }})</p>
+	<p>| Inclusion dans un template : {{'{{'}} path('{{ entriesPath[idERoute] }}) {{'}}'}}</p>
 	{% set idERoute = idERoute + 1 %}
 
 {% else %}
 
-	<p>No content type yet</p>	
+	<p>No content type yet.</p>	
 
 {% endfor %}
 	
