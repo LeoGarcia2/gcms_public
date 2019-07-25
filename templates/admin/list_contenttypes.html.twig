@@ -1,5 +1,7 @@
 {% for ct in cts %}
+
 <a href="{{ path('admin_contenttype', { ct: ct}) }}">{{ ct }}</a>
 {% else %}
 <a>No content type yet</a>
+	
 {% endfor %}

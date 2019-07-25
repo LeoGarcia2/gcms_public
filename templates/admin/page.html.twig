@@ -2,40 +2,42 @@
 
 {% block gcms_page %}
 
-	<h1>Data in {{ pageName }}</h1>
+<h1>Data in {{ pageName }}</h1>
 
-	{% for name, field in entity %}
+{% for name, field in entity %}
 
-		{% if field.timestamp is defined %}
+	{% if field.timestamp is defined %}
 
-		    {% set field = field|date('m/d/Y') %}
+	    {% set field = field|date('m/d/Y') %}
 
-		{% endif %}
+	{% endif %}
 
-		{% if 'File' in name %}
+	{% if 'File' in name %}
 
-			{% set path = name[:-4] %}
-			{% set url = entity[path] %}
+		{% set path = name[:-4] %}
+		{% set url = entity[path] %}
 
-			<section><b>{{ name }}</b> : <img width="200" src="{{ path('assets') }}/images/{{ url }}"/></section>
-		
-		{% elseif field[0] is defined %}
+		<section><b>{{ name }}</b> : <img width="200" src="{{ path('assets') }}/images/{{ url }}"/></section>
+	
+	{% elseif field[0] is defined %}
 
-			<section>
-				<b>{{ name }}</b>
+		<section>
+			<b>{{ name }}</b>
 
-				{% for data in field %}
+			{% for data in field %}
+
 				<p>{{ data }}</p>
-				{% endfor %}
+				
+			{% endfor %}
 
-			</section>
-		
-		{% else %}
+		</section>
+	
+	{% else %}
 
-		<section><b>{{ name }}</b> : {{ field }}</section>
+	<section><b>{{ name }}</b> : {{ field }}</section>
 
-		{% endif %}	
+	{% endif %}	
 
-	{% endfor %}
+{% endfor %}
 
 {% endblock %}

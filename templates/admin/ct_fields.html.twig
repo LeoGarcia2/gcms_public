@@ -49,19 +49,27 @@
 </table>
 
 <form action="{{ path('fields_contenttype', { contenttype: ctName }) }}" method="post">
+
 	{% if taxoGroups[0] is defined %}
+
 		<p>Taxonomies</p>
+
 		{% for group in taxoGroups %}
+
 			<p>
 				<input type="checkbox" name="taxo" id="{{ group }}" value="{{ group }}">
 				<label for="{{ group }}">{{ group | capitalize }}</label>
 			</p>
+
 		{% endfor %}
+
 	{% endif %}
+	
 	<select id="contenttypeFields" name="contenttypeFields[]" style="display: none;" multiple></select>
 	<select id="imageFields" name="imageFields[]" style="display: none;" multiple></select>
 	<textarea id="contenttypeArea" name="contenttypeArea" style="display: none;">{{ct}}</textarea>
 	<button id="addContenttype" type="submit" style="opacity: 0;"></button>
+	
 </form>	
 
 {% endblock %}

@@ -38,12 +38,13 @@ class AdminController extends AbstractController
 
         foreach($pagesRoutesTmp[0] as $prTmp){
             $pagesRoutes[] = substr($prTmp, 10, -2);
-        }
+        }        
         foreach($pagesPathTmp[0] as $prTmp){
             $pagesPath[] = substr($prTmp, 8, -2);
         }
 
         $entities = scandir('../src/Entity');
+
         foreach($entities as $entity){
             if(preg_match_all('#^(CT)(.)*#', $entity)){
                 $entity = substr($entity, 2, -4);
@@ -68,6 +69,7 @@ class AdminController extends AbstractController
     public function cacheClear(ConsoleController $cC, KernelInterface $kernel, $lastRoute)
     {
         $cC->clearCache($kernel);
+
         return $this->redirectToRoute($lastRoute);
     }
 
@@ -83,6 +85,7 @@ class AdminController extends AbstractController
             $logLine = fgets($logFile);
             $logs[] = $logLine;
         }
+
         fclose($logFile);
 
         $logs = array_reverse($logs);
@@ -110,6 +113,7 @@ class AdminController extends AbstractController
                 $databaseConf = $databaseLine;
             }
         }
+
         fclose($databaseFile);
 
         if($request->isMethod('post')){
@@ -120,6 +124,7 @@ class AdminController extends AbstractController
                     $databaseContent[$i] = $newDatabaseConf."\n";
                 }
             }
+
             $newDatabaseConf = implode('', $databaseContent);
             file_put_contents('../.env', $newDatabaseConf);
             $cC->createDatabase($kernel);
@@ -148,6 +153,7 @@ class AdminController extends AbstractController
         while(!feof($confFile)){
             $confLine = fgets($confFile);
             $confContent[] = $confLine;
+
             if(strpos($confLine, 'site_name:') !== false){
                 $nameConf = $confLine;
             }
@@ -158,6 +164,7 @@ class AdminController extends AbstractController
                 $localeConf = $confLine;
             }
         }
+
         fclose($confFile);
 
         $nameConf = substr($nameConf, 19, strlen($nameConf));
@@ -180,6 +187,7 @@ class AdminController extends AbstractController
                     $confContent[$i] = $newLocaleConf."\n";
                 }
             }
+
             $newConf = implode('', $confContent);
             file_put_contents('../config/packages/twig.yaml', $newConf);
 
@@ -225,18 +233,22 @@ class AdminController extends AbstractController
 
         $taxonomyController = file_get_contents('../src/Controller/TaxonomyController.php');
 
-        if($request->isMethod('post')){
+        if($request->isMethod('post')){            
             if(isset($_POST['nameOfNewTaxonomy'])){                
                 $taxonomyController = preg_replace("#}#", "    public $".$_POST['nameOfNewTaxonomy']." = [];\n}", $taxonomyController);
+
                 file_put_contents('../src/Controller/TaxonomyController.php', $taxonomyController);
+
                 return $this->redirectToRoute('admin_taxonomy');
             }
-            if(isset($_POST['category']) && isset($_POST['toAdd'])){                
+            if(isset($_POST['category']) && isset($_POST['toAdd'])){               
                 preg_match("#public \\$".$_POST['category'].".*;#", $taxonomyController, $lineOfCategory);
                 $lineOfCategory = $lineOfCategory[0];
                 $lineOfCategory = preg_replace("#]#", "'".$_POST['toAdd']."',]", $lineOfCategory);
                 $taxonomyController = preg_replace("#public \\$".$_POST['category'].".*;#", $lineOfCategory, $taxonomyController);
+
                 file_put_contents('../src/Controller/TaxonomyController.php', $taxonomyController);
+
                 return $this->redirectToRoute('admin_taxonomy');
             }
         }
@@ -244,6 +256,7 @@ class AdminController extends AbstractController
         if(isset($_GET['from']) || isset($_GET['delete'])){            
             $entitiesToCheck = [];
             $entities = scandir('../src/Entity');
+
             foreach($entities as $entity){
                 if(preg_match_all('#^(Page)(.)*#', $entity) || preg_match_all('#^(CT)(.)*#', $entity)){
                     $entity = substr($entity, 0, -4);
@@ -262,11 +275,13 @@ class AdminController extends AbstractController
             foreach($entitiesToCheck as $entityToCheck){
                 $repo = $em->getRepository('App\Entity\\'.$entityToCheck);
                 $entitiesInDb = $repo->findAll();
+
                 foreach($entitiesInDb as $entityInDb){
                     if(method_exists($entityInDb, 'getTaxo'.$_GET['from'])){
                         $getter = 'getTaxo'.$_GET['from'];
                         $setter = 'setTaxo'.$_GET['from'];
                         $taxo = $entityInDb->$getter();
+
                         if(in_array($_GET['delete'], $taxo)){
                             $key = array_search($_GET['delete'], $taxo);
                             unset($taxo[$key]);
@@ -277,6 +292,7 @@ class AdminController extends AbstractController
                     }
                 }
             }
+
             $em->flush();
 
             return $this->redirectToRoute('admin_taxonomy');
@@ -286,7 +302,6 @@ class AdminController extends AbstractController
                 $taxonomyController = preg_replace("#    \n#", "", $taxonomyController);
                 file_put_contents('../src/Controller/TaxonomyController.php', $taxonomyController);
 
-                //remove field from entities and forms, migration
                 foreach($entitiesToCheck as $entityToCheck){
                     $entity = file_get_contents('../src/Entity/'.$entityToCheck.'.php');
                     $form = file_get_contents('../src/Form/'.$entityToCheck.'Type.php');
@@ -321,8 +336,8 @@ class AdminController extends AbstractController
         if($request->isMethod('post')){
             $entitiesToUpdate = [];
             $rawNames = [];
-            foreach($_POST['pages'] as $pageToControl)
-            {
+
+            foreach($_POST['pages'] as $pageToControl){
                 if($_POST['controls'] != 'delete'){
                     $repoForControl = $em->getRepository('App\Entity\\'.$pageToControl);
                     $entitiesToUpdate[] = $repoForControl->findAll()[0];
@@ -352,9 +367,10 @@ class AdminController extends AbstractController
                         unlink('../src/Repository/'.$rawName.'Repository.php');
                         unlink('../templates/theme/pages/'.strtolower($rawName).'.html.twig');
                         $pageController = file_get_contents('../src/Controller/PageController.php');
-                        $pageController = preg_replace("#([\s\S]){5}\/\/".strtolower($rawName)."start([\s\S]*)\/\/".strtolower($rawName)."end([\s\S]){5}#", "", $pageController);
+                        $pageController = preg_replace("#([\s\S]){5}\/\/".strtolower($rawName)."start([\s\S]*)\/\/".strtolower($rawName)."end([\s\S]){6}#", "", $pageController);
                         file_put_contents('../src/Controller/PageController.php', $pageController);
                     }
+
                     $cC->fullMigration($kernel);
                     break;
             }
@@ -366,17 +382,20 @@ class AdminController extends AbstractController
         $pages = [];
         $entitiesPage = [];
         $entities = scandir('../src/Entity');
+
         foreach($entities as $entity){
             if(preg_match_all('#^(Page)(.)*#', $entity)){
                 $entity = substr($entity, 0, -4);
                 $entitiesPage[] = $entity;
             }
         }
+
         foreach($entitiesPage as $entityPage){
             $classConst = 'App\Entity\\'.$entityPage;
             $repo = $em->getRepository($classConst);
             $pages[] = $repo->findAll()[0];
         }
+
         return $this->render('admin/pages.html.twig', [
             'pages' => $pages,
             'pagesE' => $entitiesPage,
@@ -391,6 +410,7 @@ class AdminController extends AbstractController
         if(isset($_POST['entity_name']) && $_POST['entity_name'] != ''){
             $entity_name = 'Page'.ucfirst($_POST['entity_name']);
             $cC->createEntity($kernel, $entity_name);
+
             return $this->redirectToRoute('fields_page', ['page' => $entity_name]);
         }else{
             return $this->redirectToRoute('admin_pages');
@@ -405,6 +425,7 @@ class AdminController extends AbstractController
         $taxonomyGroups = [];
         $reflection = new \ReflectionClass($tC);
         $taxos = $reflection->getProperties(\ReflectionProperty::IS_PUBLIC);
+
         foreach($taxos as $taxo){
             $taxonomyGroups[] = $taxo->name;
         }
@@ -436,6 +457,7 @@ class AdminController extends AbstractController
             }else{
                 $routePath = strtolower($pageName);
             }
+
             $route = preg_replace('#pageroutedefault#', $routePath, $route);
             $route = preg_replace('#pagenamelowercase#', strtolower($pageName), $route);
             $route = preg_replace('#pagenameuppercase#', ucfirst($pageName), $route);
@@ -552,12 +574,14 @@ class AdminController extends AbstractController
     {
         $entitiesCT = [];
         $entities = scandir('../src/Entity');
+
         foreach($entities as $entity){
             if(preg_match_all('#^(CT)(.)*#', $entity)){
                 $entity = substr($entity, 0, -4);
                 $entitiesCT[] = $entity;
             }
         }
+
         return $this->render('admin/contenttypes.html.twig', [
             'ctE' => $entitiesCT,
         ]);
@@ -566,12 +590,14 @@ class AdminController extends AbstractController
     public function list_contenttypes(){
         $entitiesCT = [];
         $entities = scandir('../src/Entity');
+
         foreach($entities as $entity){
             if(preg_match_all('#^(CT)(.)*#', $entity)){
                 $entity = substr($entity, 0, strlen($entity) - 4);
                 $entitiesCT[] = $entity;
             }
         }
+
         return $this->render('admin/list_contenttypes.html.twig', [
             'cts' => $entitiesCT,
         ]);
@@ -585,6 +611,7 @@ class AdminController extends AbstractController
         if(isset($_POST['entity_name']) && $_POST['entity_name'] != ''){
             $entity_name = 'CT'.ucfirst($_POST['entity_name']);
             $cC->createEntity($kernel, $entity_name);
+
             return $this->redirectToRoute('fields_contenttype', ['contenttype' => $entity_name]);
         }else{
             return $this->redirectToRoute('admin_contenttypes');
@@ -601,8 +628,7 @@ class AdminController extends AbstractController
 
         if($request->isMethod('post')){
             $entitiesToUpdate = [];
-            foreach($_POST['entries'] as $entry)
-            {
+            foreach($_POST['entries'] as $entry){
                 $entitiesToUpdate[] = $repo->findOneById($entry);
             }
             switch($_POST['controls']){
@@ -667,6 +693,7 @@ class AdminController extends AbstractController
         $taxonomyGroups = [];
         $reflection = new \ReflectionClass($tC);
         $taxos = $reflection->getProperties(\ReflectionProperty::IS_PUBLIC);
+
         foreach($taxos as $taxo){
             $taxonomyGroups[] = $taxo->name;
         }
@@ -767,14 +794,6 @@ class AdminController extends AbstractController
             'form' => $form->createView(),
         ]);
         
-    }
-
-    /**
-     * @Route("/test", name="test")
-     */
-    public function test()
-    {
-        return new Response('ok');
     }
 
 }

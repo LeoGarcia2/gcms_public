@@ -20,14 +20,12 @@ class InstallController extends AbstractController
     public function index(Request $request)
     {
         if ($request->isMethod('POST')){
-            //Database creation
             if(isset($_POST['dbUrl']) && $_POST['dbUrl'] != ''){
                 $env = file_get_contents('../.env');
                 $env = preg_replace('#DATABASE_URL=mysql://db_user:db_password@127.0.0.1:3306/db_name#', 'DATABASE_URL='.$_POST['dbUrl'], $env);
                 file_put_contents('../.env', $env);
             }
 
-            //Update site config
             if(isset($_POST['sitename']) && $_POST['sitename'] != '' && isset($_POST['slogan']) && $_POST['slogan'] != '' && isset($_POST['locale']) && $_POST['locale'] != ''){
                 $siteConfig = file_get_contents('../config/packages/twig.yaml');
                 $siteConfig = preg_replace('#MyAwesomeWebsite#', $_POST['sitename'], $siteConfig);
@@ -56,7 +54,6 @@ class InstallController extends AbstractController
 
             $entityManager = $this->getDoctrine()->getManager();
 		    
-        	//User creation
         	$user = new User();
         	$user->setUsername($_POST['username']);
             $user->setPassword(
@@ -82,6 +79,7 @@ class InstallController extends AbstractController
     {
         $cC->createDatabase($kernel);
         $cC->fullMigration($kernel);
+        
         return $this->render('install/register.html.twig');
     }
 }

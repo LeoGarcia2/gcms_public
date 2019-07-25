@@ -2,17 +2,17 @@
 
 {% block gcms_page %}
 
-	<p>Your current website's configuration is :</p>
-	<p>- name: {{ nameConf }}</p>
-	<p>- slogan: {{ sloganConf }}</p>
-	<p>- locale: {{ localeConf }}</p>
-	<p>If you want to update it, submit the following form, it will update twig.yaml globals variables.</p>
+<p>Your current website's configuration is :</p>
+<p>- name: {{ nameConf }}</p>
+<p>- slogan: {{ sloganConf }}</p>
+<p>- locale: {{ localeConf }}</p>
+<p>If you want to update it, submit the following form, it will update twig.yaml globals variables.</p>
 
-	<form action="{{ path('admin_siteconf') }}" method="post">
-		<input class="long_input" type="text" name="nameConf" value="{{ nameConf }}" required>
-		<input class="long_input" type="text" name="sloganConf" value="{{ sloganConf }}" required>
-		<input class="long_input" type="text" name="localeConf" value="{{ localeConf }}" required>
-		<p><button type="submit">Update</button></p>
-	</form>
+<form action="{{ path('admin_siteconf') }}" method="post">
+	<input class="long_input" type="text" name="nameConf" value="{{ nameConf }}" required>
+	<input class="long_input" type="text" name="sloganConf" value="{{ sloganConf }}" required>
+	<input class="long_input" type="text" name="localeConf" value="{{ localeConf }}" required>
+	<p><button type="submit">Update</button></p>
+</form>
 	
 {% endblock %}

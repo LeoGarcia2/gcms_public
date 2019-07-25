@@ -1,8 +1,12 @@
 {% extends 'admin/layout.html.twig' %}
 
 {% block gcms_page %}
-	{% for log in logs %}
+
+{% for log in logs %}
+
 	<p>{{ log }}</p>
 	<br>
-	{% endfor %}
+
+{% endfor %}
+	
 {% endblock %}

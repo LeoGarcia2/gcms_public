@@ -49,21 +49,29 @@
 </table>
 
 <form action="{{ path('fields_page', { page: pageName }) }}" method="post">
+
 	{% if taxoGroups[0] is defined %}
+
 		<p>Taxonomies</p>
+
 		{% for group in taxoGroups %}
+
 			<p>
 				<input type="checkbox" name="taxo" id="{{ group }}" value="{{ group }}">
 				<label for="{{ group }}">{{ group | capitalize }}</label>
 			</p>
+
 		{% endfor %}
+
 	{% endif %}
+
 	<label for="pageRoute">The page adress (after yourdomain.com/)</label>
 	<input id="pageRoute" name="pageRoute" type="text">
 	<select id="pageFields" name="pageFields[]" style="display: none;" multiple></select>
 	<select id="imageFields" name="imageFields[]" style="display: none;" multiple></select>
 	<textarea id="pageArea" name="pageArea" style="display: none;">{{page}}</textarea>
 	<button id="addPage" type="submit" style="opacity: 0;"></button>
+	
 </form>	
 
 {% endblock %}

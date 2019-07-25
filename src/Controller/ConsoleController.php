@@ -13,7 +13,6 @@ use Symfony\Component\HttpKernel\KernelInterface;
 
 class ConsoleController extends AbstractController
 {
-
     /**
      * @Route("/console", name="console")
      */
@@ -26,14 +25,11 @@ class ConsoleController extends AbstractController
             'command' => 'debug:router'
         ]);
 
-        // You can use NullOutput() if you don't need the output
         $output = new BufferedOutput();
         $application->run($input, $output);
 
-        // return the output, don't use if you used NullOutput()
         $content = $output->fetch();
 
-        // return new Response(""), if you used NullOutput()
         return new Response($content);
     }
 
@@ -62,6 +58,7 @@ class ConsoleController extends AbstractController
         $output = new NullOutput();
         $application->run($input, $output);
     }
+
     public function migrateDatabase(KernelInterface $kernel)
     {
         $application = new Application($kernel);
@@ -74,6 +71,7 @@ class ConsoleController extends AbstractController
         $output = new NullOutput();
         $application->run($input, $output);
     }
+    
     public function migrateDatabase2(KernelInterface $kernel)
     {
         $application = new Application($kernel);

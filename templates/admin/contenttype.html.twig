@@ -25,20 +25,25 @@
 	
 	{% for entry in entries %}
 
-	<section class="entry">
-		
-		<p><input type="checkbox" name="entries[]" value="{{ entry.id }}"></p>
-		<p>ID : {{ entry.id }}</p>
-		<p><a href="{{ path('admin_new_entry', { ct: ct, id: entry.id }) }}">{{ entry.displayName }}</a></p>
-		<p>Created by {{ entry.author }}</p>
-		<p>At {{ entry.updatedAt|date('Y/m/d') }}</p>
-		{% if entry.published == true %}
-			<p>Published <i class="material-icons">check_box</i></p>
-		{% else %}
-			<p>Published <i class="material-icons">indeterminate_check_box</i></p>
-		{% endif %}
+		<section class="entry">
+			
+			<p><input type="checkbox" name="entries[]" value="{{ entry.id }}"></p>
+			<p>ID : {{ entry.id }}</p>
+			<p><a href="{{ path('admin_new_entry', { ct: ct, id: entry.id }) }}">{{ entry.displayName }}</a></p>
+			<p>Created by {{ entry.author }}</p>
+			<p>At {{ entry.updatedAt|date('Y/m/d') }}</p>
 
-	</section>
+			{% if entry.published == true %}
+
+				<p>Published <i class="material-icons">check_box</i></p>
+
+			{% else %}
+
+				<p>Published <i class="material-icons">indeterminate_check_box</i></p>
+				
+			{% endif %}
+
+		</section>
 
 	{% else %}
 

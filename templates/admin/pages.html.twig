@@ -32,21 +32,27 @@
 	
 	{% for page in pages %}
 
-	<section class="page">
+		<section class="page">
 
-		<p><input type="checkbox" name="pages[]" value="{{ pagesE[idPage] }}"></p>
-		<p><a href="{{ path('generic_form', { page: pagesE[idPage] }) }}">{{ page.displayName }}</a></p>
-		<p><a href="{{ path('generic_page', { page: pagesE[idPage] }) }}">Preview data</a></p>
-		<p>Created by {{ page.author }}</p>
-		<p>At {{ page.updatedAt|date('Y/m/d') }}</p>
-		{% if page.published == true %}
-			<p>Published <i class="material-icons">check_box</i></p>
-		{% else %}
-			<p>Published <i class="material-icons">indeterminate_check_box</i></p>
-		{% endif %}
+			<p><input type="checkbox" name="pages[]" value="{{ pagesE[idPage] }}"></p>
+			<p><a href="{{ path('generic_form', { page: pagesE[idPage] }) }}">{{ page.displayName }}</a></p>
+			<p><a href="{{ path('generic_page', { page: pagesE[idPage] }) }}">Preview data</a></p>
+			<p>Created by {{ page.author }}</p>
+			<p>At {{ page.updatedAt|date('Y/m/d') }}</p>
+
+			{% if page.published == true %}
+
+				<p>Published <i class="material-icons">check_box</i></p>
+
+			{% else %}
+
+				<p>Published <i class="material-icons">indeterminate_check_box</i></p>
+
+			{% endif %}
+			
+		</section>
 		
-	</section>
-	{% set idPage = idPage + 1 %}
+		{% set idPage = idPage + 1 %}
 
 	{% endfor %}
 
