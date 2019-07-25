@@ -1,0 +1,116 @@
+{% extends 'admin/layout.html.twig' %}
+
+{% block gcms_page %}
+
+<h1>Welcome to the GCMS documentation page!</h1>
+
+<section id="doc">
+	
+	<section id="intro">
+		<h2>Things to know</h2>
+
+		<p>GCMS is a Symfony 4 installation with some GUI for content managers and developers, so if you can do something with Symfony, you can do it with GCMS by codding directly within the source. It also means that you can extend/modify the behavior of the backoffice by yourself.</p>
+	</section>
+
+	<section id="tableofcontents">
+		<h2>Table of contents</h2>
+
+		<p><a href="#config_tab">The config tab</a></p>
+		<p><a href="#routes_tab">- Routes</a></p>
+		<p><a href="#taxonomy_tab">- Taxonomy</a></p>
+		<p><a href="#cache_tab">- Clear cache</a></p>
+		<p><a href="#logs_tab">- Logs</a></p>
+		<p><a href="#siteconf_tab">- Site's config</a></p>
+		<p><a href="#dbconf_tab">- Database's config</a></p>
+		<p><a href="#pages_tab">The pages tab</a></p>
+		<p><a href="#entries_tab">The entries tab</a></p>
+		<p><a href="#components_tab">The components tab</a></p>
+		<p><a href="#files_tab">The files tab</a></p>
+	</section>
+
+	<section id="config_tab">
+		<h1>Config</h1>
+
+		<section id="routes_tab">
+			<h2>Routes</h2>
+
+			<p>Here, you can see the routes of your pages and content types and the code to include in your templates to call a specific route.</p>
+			<p>To get the ID of an entry  you should look at the list of entries for the corresponding content type, it's the data just after the checkbox on the lines.</p>
+		</section>
+
+		<section id="taxonomy_tab">
+			<h2>Taxonomy</h2>
+
+			<p>Here, you can manage the groups of taxonomy and the members of these groups, you can later link a page or a content type to one or several taxonomy group(s).</p>
+		</section>
+
+		<section id="cache_tab">
+			<h2>Clear cache</h2>
+
+			<p>Execute the cache:clear command of Symfony.</p>
+		</section>
+
+		<section id="logs_tab">
+			<h2>Logs</h2>
+
+			<p>Here are displayed the 100 last lines of the log file, the latest logs are the ones on the top of the page.</p>
+		</section>
+
+		<section id="siteconf_tab">
+			<h2>Site config</h2>
+
+			<p>Here, you can update the data you entered when installing GCMS, site's name, slogan and locale.</p>
+			<p>If you want to update the logo and the favicon you should replace the files within "public/assets/site_config/" without changing their names.</p>
+		</section>
+
+		<section id="dbconf_tab">
+			<h2>Database config</h2>
+
+			<p>Here, you can update the .env file of symfony for the database access.</p>
+		</section>
+
+	</section>
+
+	<section id="pages_tab">
+		<h2>Pages</h2>
+
+		<p>Here, you can create, edit, delete, publish and unpublish pages.</p>
+		<p>When creating a page you should go through all the process until you've been redirected to the pages' list, if not, the creation won't be complete and some bugs may occur, if this is the case, you should :</p>
+		<ul>
+			<li>Delete the route of the page within "src/Controller/PageController.php"</li>
+			<li>Delete the entity file of the page within "src/Entity/"</li>
+			<li>Delete the form file of the page within "src/Form/"</li>
+			<li>Delete the repository file of the page within "src/Repository/"</li>
+			<li>Delete the template file of the page within "templates/theme/pages/"</li>
+		</ul>
+		<p>The edition of existing pages cannot cause such bugs, so don't worry.</p>
+	</section>
+
+	<section id="entries_tab">
+		<h2>Entries</h2>
+
+		<p>Here, you can create and delete content types, and then create, edit, delete, publish and unpublish entries within a content type.</p>
+		<p>When creating a content type you should go through all the process until you've been redirected to the content types' list, if not, the creation won't be complete and some bugs may occur, if this is the case, you should :</p>
+		<ul>
+			<li>Delete the entity file of the content type within "src/Entity/"</li>
+			<li>Delete the form file of the content type within "src/Form/"</li>
+			<li>Delete the repository file of the content type within "src/Repository/"</li>
+			<li>Delete the template folder of the page within "templates/theme/entries/"</li>
+		</ul>
+	</section>
+
+	<section id="components_tab">
+		<h2>Components</h2>
+
+		<p></p>
+	</section>
+
+	<section id="files_tab">
+		<h2>Files</h2>
+
+		<p>Here are displayed the files uploaded within the "public/assets/images/" directory, by default it's made for your pages' and content types' images but anything you upload into that directory will be displayed and can be deleted.</p>
+	</section>
+
+</section>
+
+{% endblock %}

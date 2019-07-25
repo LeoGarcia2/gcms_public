@@ -57,7 +57,6 @@
 					<section class="submenu">
 						<a href="{{ path('admin_routes') }}">Routes</a>
 						<a href="{{ path('admin_taxonomy') }}">Taxonomy</a>
-						<a href="#">Translations</a>
 						<a href="{{ path('admin_cacheclear', { lastRoute: app.request.get('_route') }) }}">Clear cache</a>
 						<a href="{{ path('admin_logs') }}">Logs</a>
 						<a href="{{ path('admin_siteconf') }}">Edit site's config</a>
@@ -65,6 +64,7 @@
 					</section>
 				</section>
 				<a href="{{ path('admin_files') }}">Files</a>
+				<a href="{{ path('admin_doc') }}">Documentation</a>
 
 			</nav>
 

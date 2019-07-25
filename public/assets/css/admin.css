@@ -16,6 +16,10 @@ body{
 h1, h2{
 	text-align: center;
 }
+section#doc h1, section#doc h2{
+	text-align: left;
+	margin-top: 30px;
+}
 h1{
 	font-size: 48px;
 }
