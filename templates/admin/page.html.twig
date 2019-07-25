@@ -6,22 +6,35 @@
 
 	{% for name, field in entity %}
 
-	{% if field.timestamp is defined %}
-	    {% set field = field|date('m/d/Y') %}
-	{% endif %}
-	{% if 'File' in name %}
-		{% set path = name[:-4] %}
-		{% set url = entity[path] %}
+		{% if field.timestamp is defined %}
 
-		<section><b>{{ name }}</b> : <img width="200" src="{{ path('assets') }}/images/{{ url }}"/></section>
+		    {% set field = field|date('m/d/Y') %}
+
+		{% endif %}
+
+		{% if 'File' in name %}
+
+			{% set path = name[:-4] %}
+			{% set url = entity[path] %}
+
+			<section><b>{{ name }}</b> : <img width="200" src="{{ path('assets') }}/images/{{ url }}"/></section>
+		
+		{% elseif field[0] is defined %}
+
+			<section>
+				<b>{{ name }}</b>
+
+				{% for data in field %}
+				<p>{{ data }}</p>
+				{% endfor %}
+
+			</section>
 		
 		{% else %}
 
 		<section><b>{{ name }}</b> : {{ field }}</section>
 
-	{% endif %}
-
-	
+		{% endif %}	
 
 	{% endfor %}
 

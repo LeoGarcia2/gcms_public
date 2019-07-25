@@ -204,8 +204,10 @@ class AdminController extends AbstractController
     /**
      * @Route("/admin/taxonomy", name="admin_taxonomy")
      */
-    public function taxonomy(Request $request, TaxonomyController $tC)
+    public function taxonomy(Request $request, TaxonomyController $tC, ConsoleController $cC, KernelInterface $kernel)
     {
+        $em = $this->getDoctrine()->getManager();
+
         $taxonomyController = file_get_contents('../src/Controller/TaxonomyController.php');
 
         if($request->isMethod('post')){
@@ -224,18 +226,65 @@ class AdminController extends AbstractController
             }
         }
 
+        if(isset($_GET['from']) || isset($_GET['delete'])){            
+            $entitiesToCheck = [];
+            $entities = scandir('../src/Entity');
+            foreach($entities as $entity){
+                if(preg_match_all('#^(Page)(.)*#', $entity) || preg_match_all('#^(CT)(.)*#', $entity)){
+                    $entity = substr($entity, 0, -4);
+                    $entitiesToCheck[] = $entity;
+                }
+            }
+        }
+
         if(isset($_GET['from'])){
             preg_match("#public \\$".$_GET['from'].".*;#", $taxonomyController, $lineOfCategory);
             $lineOfCategory = $lineOfCategory[0];
             $lineOfCategory = preg_replace("#'".$_GET['delete']."'\,#", "", $lineOfCategory);
             $taxonomyController = preg_replace("#public \\$".$_GET['from'].".*;#", $lineOfCategory, $taxonomyController);
             file_put_contents('../src/Controller/TaxonomyController.php', $taxonomyController);
+
+            foreach($entitiesToCheck as $entityToCheck){
+                $repo = $em->getRepository('App\Entity\\'.$entityToCheck);
+                $entitiesInDb = $repo->findAll();
+                foreach($entitiesInDb as $entityInDb){
+                    if(method_exists($entityInDb, 'getTaxo'.$_GET['from'])){
+                        $getter = 'getTaxo'.$_GET['from'];
+                        $setter = 'setTaxo'.$_GET['from'];
+                        $taxo = $entityInDb->$getter();
+                        if(in_array($_GET['delete'], $taxo)){
+                            $key = array_search($_GET['delete'], $taxo);
+                            unset($taxo[$key]);
+
+                            $entityInDb->$setter($taxo, 1);
+                            $em->persist($entityInDb);
+                        }
+                    }
+                }
+            }
+            $em->flush();
+
             return $this->redirectToRoute('admin_taxonomy');
         }else{
             if(isset($_GET['delete'])){
                 $taxonomyController = preg_replace("#public \\$".$_GET['delete'].".*;#", "", $taxonomyController);
                 $taxonomyController = preg_replace("#    \n#", "", $taxonomyController);
                 file_put_contents('../src/Controller/TaxonomyController.php', $taxonomyController);
+
+                //remove field from entities and forms, migration
+                foreach($entitiesToCheck as $entityToCheck){
+                    $entity = file_get_contents('../src/Entity/'.$entityToCheck.'.php');
+                    $form = file_get_contents('../src/Form/'.$entityToCheck.'Type.php');
+                    $entity = preg_replace("#\/\*\*([\s\S]){10,50}private \\\$taxo".ucfirst($_GET['delete']).";([\s\S]){6}#", "", $entity);
+                    $entity = preg_replace("#public function getTaxo".ucfirst($_GET['delete'])."([\s\S]){50,100}public function setTaxo".ucfirst($_GET['delete'])."([\s\S]){50,100}return \\\$this;([\s\S]){12}#", "", $entity);
+                    $form = preg_replace("#->add\(\'taxo".ucfirst($_GET['delete'])."\'([\s\S]){100,300}\]\)([\s\S]){13}#", "", $form);
+
+                    file_put_contents('../src/Entity/'.$entityToCheck.'.php', $entity);
+                    file_put_contents('../src/Form/'.$entityToCheck.'Type.php', $form);
+                }
+
+                $cC->fullMigration($kernel);       
+
                 return $this->redirectToRoute('admin_taxonomy');
             }
         }
@@ -591,8 +640,6 @@ class AdminController extends AbstractController
         rmdir('../templates/theme/entries/'.strtolower($ct));
 
         $cC->fullMigration($kernel);
-        
-        $em->flush();
 
         return $this->redirectToRoute('admin_contenttypes');
     }
@@ -705,6 +752,14 @@ class AdminController extends AbstractController
             'form' => $form->createView(),
         ]);
         
+    }
+
+    /**
+     * @Route("/test", name="test")
+     */
+    public function test()
+    {
+        return new Response('ok');
     }
 
 }
