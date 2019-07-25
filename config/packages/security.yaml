@@ -16,10 +16,17 @@ security:
             security: false
         main:
             anonymous: true
+            logout:
+                path: app_logout
+                target: app_login
             guard:
                 authenticators:
                     - App\Security\UserAuthenticator
-
+        admin:
+            anonymous: false
+            guard:
+                authenticators:
+                    - App\Security\UserAuthenticator
             # activate different ways to authenticate
             # https://symfony.com/doc/current/security.html#firewalls-authentication
 
@@ -29,5 +36,11 @@ security:
     # Easy way to control access for large sections of your site
     # Note: Only the *first* access control that matches will be used
     access_control:
-        # - { path: ^/admin, roles: ROLE_ADMIN }
+        - { path: ^/admin, roles: IS_AUTHENTICATED_FULLY }
         # - { path: ^/profile, roles: ROLE_USER }
+    role_hierarchy:
+        ROLE_EDITOR: ROLE_USER
+        ROLE_REDACTOR: ROLE_EDITOR
+        ROLE_SUPERVISOR: ROLE_REDACTOR
+        ROLE_MANAGER: ROLE_SUPERVISOR
+        ROLE_ADMIN: ROLE_MANAGER

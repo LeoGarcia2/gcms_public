@@ -25,12 +25,13 @@
 			<section id="gcms_bar">
 
 				<p>
-					<i class="material-icons">account_circle</i>
+					<i class="material-icons">face</i>
 					<span>{{ app.user.username }}</span>
+					<a href="{{ path('app_logout') }}" title="Logout"><i class="material-icons">power_off</i></a>
 				</p>
 
 				<p>
-					<a href="{{ path(site_homepage) }}" title="Open the website"><i class="material-icons">open_in_new</i></a>
+					<a href="/" title="Open the website"><i class="material-icons">open_in_new</i></a>
 				</p>
 
 			</section>

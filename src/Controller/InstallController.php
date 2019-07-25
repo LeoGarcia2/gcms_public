@@ -62,6 +62,8 @@ class InstallController extends AbstractController
                     $_POST['password']
                 )
             );
+            $user->setRoles(['ROLE_ADMIN']);
+            
             $entityManager->persist($user);
 
             $entityManager->flush();

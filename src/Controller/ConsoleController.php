@@ -13,26 +13,6 @@ use Symfony\Component\HttpKernel\KernelInterface;
 
 class ConsoleController extends AbstractController
 {
-    /**
-     * @Route("/console", name="console")
-     */
-    public function consoletest(KernelInterface $kernel)
-    {
-        $application = new Application($kernel);
-        $application->setAutoExit(false);
-
-        $input = new ArrayInput([
-            'command' => 'debug:router'
-        ]);
-
-        $output = new BufferedOutput();
-        $application->run($input, $output);
-
-        $content = $output->fetch();
-
-        return new Response($content);
-    }
-
     public function clearCache(KernelInterface $kernel)
     {
         $application = new Application($kernel);

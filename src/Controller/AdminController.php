@@ -393,7 +393,7 @@ class AdminController extends AbstractController
                         unlink('../src/Repository/'.$rawName.'Repository.php');
                         unlink('../templates/theme/pages/'.strtolower($rawName).'.html.twig');
                         $pageController = file_get_contents('../src/Controller/PageController.php');
-                        $pageController = preg_replace("#([\s\S]){5}\/\/".strtolower($rawName)."start([\s\S]*)\/\/".strtolower($rawName)."end([\s\S]){6}#", "", $pageController);
+                        $pageController = preg_replace("#([\s\S]){5}\/\/".strtolower($rawName)."start([\s\S]*)\/\/".strtolower($rawName)."end([\s\S]){2}#", "", $pageController);
                         file_put_contents('../src/Controller/PageController.php', $pageController);
                     }
 
