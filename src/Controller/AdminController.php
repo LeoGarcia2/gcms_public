@@ -479,7 +479,11 @@ class AdminController extends AbstractController
             $pageController = file_get_contents('../src/Controller/PageController.php');
 
             if(isset($_POST['pageRoute']) && $_POST['pageRoute'] != ''){
-                $routePath = strtolower($_POST['pageRoute']);
+                if($_POST['pageRoute'] == '/'){
+                    $routePath = '';
+                }else{
+                    $routePath = strtolower($_POST['pageRoute']);
+                }                
             }else{
                 $routePath = strtolower($pageName);
             }
