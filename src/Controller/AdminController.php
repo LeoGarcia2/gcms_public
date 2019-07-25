@@ -27,23 +27,38 @@ class AdminController extends AbstractController
     public function routes()
     {
         $pagesRoutes = [];
+        $pagesPath = [];
         $entriesRoutes = [];
+        $listingsPath = [];
+        $entriesPath = [];
+
         $pageController = file_get_contents('../src/Controller/PageController.php');
         preg_match_all('#\* @Route\(\"(.*)",#', $pageController, $pagesRoutesTmp);
+        preg_match_all('#, name=\"(.*)\"\)#', $pageController, $pagesPathTmp);
+
         foreach($pagesRoutesTmp[0] as $prTmp){
             $pagesRoutes[] = substr($prTmp, 10, -2);
         }
+        foreach($pagesPathTmp[0] as $prTmp){
+            $pagesPath[] = substr($prTmp, 8, -2);
+        }
+
         $entities = scandir('../src/Entity');
         foreach($entities as $entity){
             if(preg_match_all('#^(CT)(.)*#', $entity)){
                 $entity = substr($entity, 2, -4);
                 $entriesRoutes[] = $entity;
+                $entriesPath[] = 'entry\', {ctWithoutCt: '.$entity.', id: {id}}';
+                $listingsPath[] = 'listing\', {ctWithoutCt: '.$entity.'}';
             }
         }
         
         return $this->render('admin/routes.html.twig', [
             'pagesRoutes' => $pagesRoutes,
-            'entriesRoutes' => $entriesRoutes
+            'pagesPath' => $pagesPath,
+            'entriesRoutes' => $entriesRoutes,
+            'listingsPath' => $listingsPath,
+            'entriesPath' => $entriesPath,
         ]);
     }
 
@@ -337,7 +352,7 @@ class AdminController extends AbstractController
                         unlink('../src/Repository/'.$rawName.'Repository.php');
                         unlink('../templates/theme/pages/'.strtolower($rawName).'.html.twig');
                         $pageController = file_get_contents('../src/Controller/PageController.php');
-                        $pageController = preg_replace("#\/\/".strtolower($rawName)."start([\s\S]*)\/\/".strtolower($rawName)."end#", "", $pageController);
+                        $pageController = preg_replace("#([\s\S]){5}\/\/".strtolower($rawName)."start([\s\S]*)\/\/".strtolower($rawName)."end([\s\S]){5}#", "", $pageController);
                         file_put_contents('../src/Controller/PageController.php', $pageController);
                     }
                     $cC->fullMigration($kernel);

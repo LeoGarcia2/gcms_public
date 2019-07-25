@@ -28,6 +28,7 @@
 	<section class="entry">
 		
 		<p><input type="checkbox" name="entries[]" value="{{ entry.id }}"></p>
+		<p>ID : {{ entry.id }}</p>
 		<p><a href="{{ path('admin_new_entry', { ct: ct, id: entry.id }) }}">{{ entry.displayName }}</a></p>
 		<p>Created by {{ entry.author }}</p>
 		<p>At {{ entry.updatedAt|date('Y/m/d') }}</p>

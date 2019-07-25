@@ -302,9 +302,9 @@ section#wrapper main section#gcms_page section.contenttype > a:last-child:hover,
 }
 section#wrapper main section#gcms_page form#listing section.entry{
 	display: grid;
-	grid-template-columns: 5% 15% 10% 25% 15% 15% 15%;
+	grid-template-columns: 5% 5% 15% 10% 25% 15% 10% 15%;
 	grid-template-rows: auto;
-	grid-template-areas: "check name blank creator creation_date blank2 state";
+	grid-template-areas: "check id name blank creator creation_date blank2 state";
 }
 section#wrapper main section#gcms_page form#listing section.entry p{
 	display: flex;
@@ -314,14 +314,17 @@ section#wrapper main section#gcms_page form#listing section.entry p:nth-child(1)
 	grid-area: check;
 }
 section#wrapper main section#gcms_page form#listing section.entry p:nth-child(2){
-	grid-area: name;
+	grid-area: id;
 }
 section#wrapper main section#gcms_page form#listing section.entry p:nth-child(3){
-	grid-area: creator;
+	grid-area: name;
 }
 section#wrapper main section#gcms_page form#listing section.entry p:nth-child(4){
-	grid-area: creation_date;
+	grid-area: creator;
 }
 section#wrapper main section#gcms_page form#listing section.entry p:nth-child(5){
+	grid-area: creation_date;
+}
+section#wrapper main section#gcms_page form#listing section.entry p:nth-child(6){
 	grid-area: state;
 }

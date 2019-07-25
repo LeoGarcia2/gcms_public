@@ -3,19 +3,38 @@
 {% block gcms_page %}
 
 <h2>Routes of your pages</h2>
+
+	{% set idPRoute = 0 %}
+
 	{% for route in pagesRoutes %}
+
 		<p><a href="{{ route }}">{{ route }}</a></p>
+		<p>| Inclusion dans un template : path('{{ pagesPath[idPRoute] }}')</p>
+		{% set idPRoute = idPRoute + 1 %}
+
 	{% else %}
+
 		<p>No pages yet</p>
+
 	{% endfor %}
 
 <h2>Routes of your content types</h2>
+
+	{% set idERoute = 0 %}
+
 	{% for route in entriesRoutes %}
+
 		<h3>Content type : CT{{ route }}</h3>
 		<p>Listing : <a href="/{{ route }}">/{{ route }}</a></p>
+		<p>| Inclusion dans un template : path('{{ listingsPath[idERoute] }})</p>
 		<p>Entry : /{{ route }}/{id}</p>
+		<p>| Inclusion dans un template : path('{{ entriesPath[idERoute] }})</p>
+		{% set idERoute = idERoute + 1 %}
+
 	{% else %}
+
 		<p>No content type yet</p>	
+
 	{% endfor %}
 	
 {% endblock %}
