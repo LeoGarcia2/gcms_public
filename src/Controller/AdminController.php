@@ -3,6 +3,8 @@
 namespace App\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
+use App\Entity\User;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpKernel\KernelInterface;
 use App\Controller\ConsoleController;
@@ -19,6 +21,49 @@ class AdminController extends AbstractController
     public function index()
     {
         return $this->render('admin/index.html.twig');
+    }
+    /**
+     * @Route("/admin/register/{id}", name="admin_register")
+     */
+    public function register(Request $request, UserPasswordEncoderInterface $passwordEncoder, $id = null): Response
+    {
+        $entityManager = $this->getDoctrine()->getManager();
+        
+        if($id == null){
+            $user = new User();
+            $user_id = null;
+            $username = '';
+            $roles = [];
+        }else{
+            $user = $entityManager->getRepository(User::class)->findOneById($id);
+            $user_id = $id;
+            $username = $user->getUsername();
+            $roles = $user->getRoles();
+        }
+
+        if ($request->isMethod('POST')){
+            
+            $user->setUsername($_POST['username']);
+            $user->setPassword(
+                $passwordEncoder->encodePassword(
+                    $user,
+                    $_POST['password']
+                )
+            );
+            $user->setRoles($_POST['roles']);
+
+            $entityManager->persist($user);
+
+            $entityManager->flush();
+
+            return $this->redirectToRoute('admin_home');
+        }
+
+        return $this->render('admin/register.html.twig', [
+            'username' => $username,
+            'roles' => $roles,
+            'user_id' => $user_id,
+        ]);
     }
 
     /**

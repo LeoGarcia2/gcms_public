@@ -1,0 +1,45 @@
+{% extends 'admin/layout.html.twig' %}
+
+{% block gcms_page %}
+
+<h1>Enter User's data :</h1>
+
+{% if user_id == null %}
+<form action="{{ path('admin_register') }}" method="post">
+{% else %}
+<form action="{{ path('admin_register', {id: user_id}) }}" method="post">
+{% endif %}
+
+	<section>
+		<label for="username">User's username(*) : </label>
+		<input type="text" name="username" id="username" placeholder="AmazingUser" minlength="3" required value="{{ username }}">
+	</section>
+
+	<section>
+		<label for="password">User's password(*) : </label>
+		<input type="password" name="password" id="password" minlength="3" required>
+	</section>
+
+	<section>
+		<label for="roles">User's roles(*) : </label>
+		<select name="roles[]" id="roles" multiple>
+			<optgroup label="Hierarchical roles">				
+				<option value="ROLE_EDITOR" {% if "ROLE_EDITOR" in roles %}selected{% endif %}>Editor</option>
+				<option value="ROLE_REDACTOR" {% if "ROLE_REDACTOR" in roles %}selected{% endif %}>Redactor</option>
+				<option value="ROLE_SUPERVISOR" {% if "ROLE_SUPERVISOR" in roles %}selected{% endif %}>Supervisor</option>
+				<option value="ROLE_MANAGER" {% if "ROLE_MANAGER" in roles %}selected{% endif %}>Manager</option>
+				<option value="ROLE_ADMIN" {% if "ROLE_ADMIN" in roles %}selected{% endif %}>Admin</option>
+			</optgroup>
+			<optgroup label="Standalone roles">
+				<option value="ROLE_PUBLISHER" {% if "ROLE_PUBLISHER" in roles %}selected{% endif %}>Publisher</option>
+			</optgroup>				
+		</select>
+	</section>
+
+	<section>
+		<button type="submit">I've set all of the data correctly!</button>
+	</section>
+	
+</form>
+
+{% endblock %}
