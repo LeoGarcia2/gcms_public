@@ -9,7 +9,7 @@
 	<section id="intro">
 		<h2>Things to know</h2>
 
-		<p>GCMS is a Symfony 4 installation with some GUI for content managers and developers, so if you can do something with Symfony, you can do it with GCMS by codding directly within the source. It also means that you can extend/modify the behavior of the backoffice by yourself.</p>
+		<p>GCMS is a Symfony 4 installation with some GUI for content managers and developers, so if you can do something with Symfony, you can do it with GCMS by coding directly within the source. It also means that you can extend/modify the behavior of the backoffice by yourself.</p>
 	</section>
 
 	<section id="tableofcontents">
@@ -28,6 +28,7 @@
 		<p><a href="#files_tab">The files tab</a></p>
 		<p><a href="#users_tab">The users tab</a></p>
 		<p><a href="#doc_tab">The documentation tab</a></p>
+		<p><a href="#more">Going further</a></p>
 	</section>
 
 	<section id="config_tab">
@@ -37,7 +38,7 @@
 			<h2>Routes</h2>
 
 			<p>Here, you can see the routes of your pages and content types and the code to include in your templates to call a specific route.</p>
-			<p>To get the ID of an entry  you should look at the list of entries for the corresponding content type, it's the data just after the checkbox on the lines.</p>
+			<p>To get the ID of an entry  you should look at the list of entries for the corresponding content type, it's the first data in the line.</p>
 		</section>
 
 		<section id="taxonomy_tab">
@@ -77,7 +78,7 @@
 		<h2>Pages</h2>
 
 		<p>Here, you can create, edit, delete, publish and unpublish pages.</p>
-		<p>When creating a page you should go through all the process until you've been redirected to the pages' list, if not, the creation won't be complete and some bugs may occur, if this is the case, you should :</p>
+		<p>When creating a page you should go through all the process until you've been redirected to the pages' list, if not, the creation won't be complete and some bugs may occur. If this is the case, you should :</p>
 		<ul>
 			<li>Delete the route of the page within "src/Controller/PageController.php"</li>
 			<li>Delete the entity file of the page within "src/Entity/"</li>
@@ -115,19 +116,19 @@
 	</section>
 
 	<section id="users_tab">
-		<h2>users</h2>
+		<h2>Users</h2>
 
 		<p>Here you can add, edit and delete user accounts to access the backoffice, there are several roles :</p>
 		<ul>
 			<li>Editor, can add entries and edit the ones he created.</li>
 			<li>Redactor, can add content types, pages and edit the ones he created.</li>
-			<li>Publisher (standalone role), can publish and unpublish content, the range of contents he can acts on is defined by his main role (Useful only for Editors and Redactors as the next roles in the hierarchy have it by default).</li>
+			<li>Publisher (standalone role), can publish and unpublish content, the range of contents he can act on is defined by his main role (Useful only for Editors and Redactors as the next roles in the hierarchy have it by default).</li>
 			<li>Supervisor, full control over content types, entries and pages.</li>
 			<li>Manager, can manage files, taxonomy, clear the cache and display routes and logs.</li>
 			<li>Admin, as you might expect, can do anything.</li>
 			<li>Developer (standalone role), can view components.</li>
 		</ul>
-		<p>The roles not marked with the "(standalone role)" are hierarchicals, so the lowest role is Editor and the highest is Admin, everyone can be Developer and the Publisher role is meaningful only for Editors and Redactors because he is a part of every higher roles.</p>
+		<p>The roles not marked with the "(standalone role)" are hierarchicals, so the lowest role is Editor and the highest is Admin, everyone can be Developer and the Publisher role is meaningful only for Editors and Redactors because it is part of every higher roles.</p>
 	</section>
 
 	<section id="doc_tab">
@@ -135,6 +136,21 @@
 
 		<p>I wonder what you were expecting here.</p>
 		<p>Let's make some websites ! ;)</p>
+	</section>
+
+	<section id="more">
+		<h2>Going further</h2>
+
+		<p>In order to deploy your application you must have set a homepage URL for one page, the homepage will be accessible at the root of your server/directory, for example :</p>
+		<ul>
+			<li>https://mydomain/ for a production server.</li>
+			<li>https://localhost:8000/ for a Symfony 4 Built-in server.</li>
+			<li>http://localhost/gcms/ for an apache server.</li>
+		</ul>
+		<p>Then, it's up to you to make the linking between your pages directly within the "templates/theme/" folder. See the routes' and components' tabs to learn how to make these links.</p>
+
+		<p>A link to the Symfony Documentation may be useful, so here it is !</p>
+		<p><a href="https://symfony.com/doc/4.0//index.html#gsc.tab=0">Symfony Doc</a></p>
 	</section>
 
 </section>
