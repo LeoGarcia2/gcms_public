@@ -64,7 +64,7 @@ If you want to update the logo and the favicon you should replace the files with
 
 Here, you can update the .env file of symfony for the database access.
 
-## Pages
+# Pages
 
 Here, you can create, edit, delete, publish and unpublish pages.
 
@@ -78,7 +78,7 @@ When creating a page you should go through all the process until you've been red
 
 The edition of existing pages cannot cause such bugs, so don't worry.
 
-## Entries
+# Entries
 
 Here, you can create and delete content types, and then create, edit, delete, publish and unpublish entries within a content type.
 
@@ -89,17 +89,17 @@ When creating a content type you should go through all the process until you've 
 *   Delete the repository file of the content type within "src/Repository/"
 *   Delete the template folder of the page within "templates/theme/entries/"
 
-## Components
+# Components
 
 Here, you can list the components available in your website and their inclusion path.
 
 Inclusion path is {{'{{'}} render(controller('App\\Controller\\ComponentsController::{function}')) {{'}}'}}
 
-## Files
+# Files
 
 Here are displayed the files uploaded within the "public/assets/images/" directory, by default it's made for your pages' and content types' images but anything you upload into that directory will be displayed and can be deleted.
 
-## Users
+# Users
 
 Here you can add, edit and delete user accounts to access the backoffice, there are several roles :
 
@@ -113,13 +113,13 @@ Here you can add, edit and delete user accounts to access the backoffice, there 
 
 The roles not marked with the "(standalone role)" are hierarchicals, so the lowest role is Editor and the highest is Admin, everyone can be Developer and the Publisher role is meaningful only for Editors and Redactors because it is part of every higher roles.
 
-## Documentation
+# Documentation
 
 I wonder what you were expecting here.
 
 Let's make some websites ! ;)
 
-## Going further
+# Going further
 
 In order to deploy your application you must have set a homepage URL for one page, the homepage will be accessible at the root of your server/directory, for example :
 
