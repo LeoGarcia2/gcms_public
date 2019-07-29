@@ -26,6 +26,7 @@
 		<p><a href="#entries_tab">The entries tab</a></p>
 		<p><a href="#components_tab">The components tab</a></p>
 		<p><a href="#files_tab">The files tab</a></p>
+		<p><a href="#users_tab">The users tab</a></p>
 		<p><a href="#doc_tab">The documentation tab</a></p>
 	</section>
 
@@ -111,6 +112,22 @@
 		<h2>Files</h2>
 
 		<p>Here are displayed the files uploaded within the "public/assets/images/" directory, by default it's made for your pages' and content types' images but anything you upload into that directory will be displayed and can be deleted.</p>
+	</section>
+
+	<section id="users_tab">
+		<h2>users</h2>
+
+		<p>Here you can add, edit and delete user accounts to access the backoffice, there are several roles :</p>
+		<ul>
+			<li>Editor, can add entries and edit the ones he created.</li>
+			<li>Redactor, can add content types, pages and edit the ones he created.</li>
+			<li>Publisher (standalone role), can publish and unpublish content, the range of contents he can acts on is defined by his main role (Useful only for Editors and Redactors as the next roles in the hierarchy have it by default).</li>
+			<li>Supervisor, full control over content types, entries and pages.</li>
+			<li>Manager, can manage files, taxonomy, clear the cache and display routes and logs.</li>
+			<li>Admin, as you might expect, can do anything.</li>
+			<li>Developer (standalone role), can view components.</li>
+		</ul>
+		<p>The roles not marked with the "(standalone role)" are hierarchicals, so the lowest role is Editor and the highest is Admin, everyone can be Developer and the Publisher role is meaningful only for Editors and Redactors because he is a part of every higher roles.</p>
 	</section>
 
 	<section id="doc_tab">

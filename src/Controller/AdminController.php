@@ -22,12 +22,49 @@ class AdminController extends AbstractController
     {
         return $this->render('admin/index.html.twig');
     }
+
+    /**
+     * @Route("/admin/users", name="admin_users")
+     */
+    public function users()
+    {
+        $this->denyAccessUnlessGranted('ROLE_ADMIN');
+
+        $em = $this->getDoctrine()->getManager();
+        $repo = $em->getRepository(User::class);
+
+        $users = $repo->findAll();
+
+        return $this->render('admin/users.html.twig', [
+            'users' => $users,
+        ]);
+    }
+
+    /**
+     * @Route("/admin/users/delete/{id}", name="admin_delete_user")
+     */
+    public function delete_user($id)
+    {
+        $this->denyAccessUnlessGranted('ROLE_ADMIN');
+
+        $em = $this->getDoctrine()->getManager();
+        $repo = $em->getRepository(User::class);
+        $user = $repo->findOneById($id);
+
+        $em->remove($user);
+        $em->flush();
+
+        return $this->redirectToRoute('admin_users');
+    }
+
     /**
      * @Route("/admin/register/{id}", name="admin_register")
      */
     public function register(Request $request, UserPasswordEncoderInterface $passwordEncoder, $id = null): Response
     {
-        $entityManager = $this->getDoctrine()->getManager();
+        $this->denyAccessUnlessGranted('ROLE_ADMIN');
+        
+        $em = $this->getDoctrine()->getManager();
         
         if($id == null){
             $user = new User();
@@ -35,7 +72,7 @@ class AdminController extends AbstractController
             $username = '';
             $roles = [];
         }else{
-            $user = $entityManager->getRepository(User::class)->findOneById($id);
+            $user = $em->getRepository(User::class)->findOneById($id);
             $user_id = $id;
             $username = $user->getUsername();
             $roles = $user->getRoles();
@@ -44,19 +81,21 @@ class AdminController extends AbstractController
         if ($request->isMethod('POST')){
             
             $user->setUsername($_POST['username']);
-            $user->setPassword(
-                $passwordEncoder->encodePassword(
-                    $user,
-                    $_POST['password']
-                )
-            );
+            if(isset($_POST['password']) && $_POST['password'] != ''){
+                $user->setPassword(
+                    $passwordEncoder->encodePassword(
+                        $user,
+                        $_POST['password']
+                    )
+                );
+            }                
             $user->setRoles($_POST['roles']);
 
-            $entityManager->persist($user);
+            $em->persist($user);
 
-            $entityManager->flush();
+            $em->flush();
 
-            return $this->redirectToRoute('admin_home');
+            return $this->redirectToRoute('admin_users');
         }
 
         return $this->render('admin/register.html.twig', [
@@ -79,6 +118,8 @@ class AdminController extends AbstractController
      */
     public function routes()
     {
+        $this->denyAccessUnlessGranted('ROLE_MANAGER');
+        
         $pagesRoutes = [];
         $pagesPath = [];
         $entriesRoutes = [];
@@ -121,6 +162,8 @@ class AdminController extends AbstractController
      */
     public function cacheClear(ConsoleController $cC, KernelInterface $kernel, $lastRoute)
     {
+        $this->denyAccessUnlessGranted('ROLE_MANAGER');
+        
         $cC->clearCache($kernel);
 
         return $this->redirectToRoute($lastRoute);
@@ -131,6 +174,8 @@ class AdminController extends AbstractController
      */
     public function logs()
     {
+        $this->denyAccessUnlessGranted('ROLE_MANAGER');
+        
         $logFile = fopen('../var/log/dev.log','r');
         $logs = [];
   
@@ -154,6 +199,8 @@ class AdminController extends AbstractController
      */
     public function database(Request $request, ConsoleController $cC, KernelInterface $kernel)
     {
+        $this->denyAccessUnlessGranted('ROLE_ADMIN');
+        
         $databaseFile = fopen('../.env','r');
 
         $databaseConf = '';
@@ -196,6 +243,8 @@ class AdminController extends AbstractController
      */
     public function siteconf(Request $request)
     {
+        $this->denyAccessUnlessGranted('ROLE_ADMIN');
+        
         $confFile = fopen('../config/packages/twig.yaml','r');
 
         $nameConf = '';
@@ -259,6 +308,8 @@ class AdminController extends AbstractController
      */
     public function files()
     {
+        $this->denyAccessUnlessGranted('ROLE_MANAGER');
+        
         if(isset($_GET['delete'])){
             unlink('../public/assets/images/'.$_GET['delete']);
         }
@@ -282,6 +333,8 @@ class AdminController extends AbstractController
      */
     public function taxonomy(Request $request, TaxonomyController $tC, ConsoleController $cC, KernelInterface $kernel)
     {
+        $this->denyAccessUnlessGranted('ROLE_MANAGER');
+        
         $em = $this->getDoctrine()->getManager();
 
         $taxonomyController = file_get_contents('../src/Controller/TaxonomyController.php');
@@ -383,6 +436,8 @@ class AdminController extends AbstractController
      * @Route("/admin/components", name="admin_components")
      */
     public function components(Request $request){
+        $this->denyAccessUnlessGranted('ROLE_DEVELOPER');
+        
         $components = [];
         $componentsController = file_get_contents('../src/Controller/ComponentsController.php');
 
@@ -402,6 +457,8 @@ class AdminController extends AbstractController
      */
     public function pages(Request $request, ConsoleController $cC, KernelInterface $kernel)
     {
+        $this->denyAccessUnlessGranted('ROLE_REDACTOR');
+        
         $em = $this->getDoctrine()->getManager();
 
         if($request->isMethod('post')){
@@ -410,9 +467,15 @@ class AdminController extends AbstractController
 
             foreach($_POST['pages'] as $pageToControl){
                 if($_POST['controls'] != 'delete'){
+
+                    $this->denyAccessUnlessGranted('ROLE_PUBLISHER');
+        
                     $repoForControl = $em->getRepository('App\Entity\\'.$pageToControl);
                     $entitiesToUpdate[] = $repoForControl->findAll()[0];
                 }else{
+
+                    $this->denyAccessUnlessGranted('ROLE_SUPERVISOR');
+
                     $entityToDelete = $em->getRepository('App\Entity\\'.$pageToControl)->findAll()[0];
                     $em->remove($entityToDelete);
                     $rawNames[] = $pageToControl;
@@ -478,6 +541,8 @@ class AdminController extends AbstractController
      */
     public function new_page(ConsoleController $cC, KernelInterface $kernel)
     {
+        $this->denyAccessUnlessGranted('ROLE_REDACTOR');
+        
         if(isset($_POST['entity_name']) && $_POST['entity_name'] != ''){
             $entity_name = 'Page'.ucfirst($_POST['entity_name']);
             $cC->createEntity($kernel, $entity_name);
@@ -493,6 +558,8 @@ class AdminController extends AbstractController
      */
     public function fields_page(Request $request, TaxonomyController $tC, ConsoleController $cC, KernelInterface $kernel, $page)
     {
+        $this->denyAccessUnlessGranted('ROLE_REDACTOR');
+        
         $taxonomyGroups = [];
         $reflection = new \ReflectionClass($tC);
         $taxos = $reflection->getProperties(\ReflectionProperty::IS_PUBLIC);
@@ -578,6 +645,8 @@ class AdminController extends AbstractController
      */
     public function generic_form(Request $request, $page)
     {
+        $this->denyAccessUnlessGranted('ROLE_REDACTOR');
+        
         $classConst = 'App\Entity\\'.$page;
         $formConst = 'App\Form\\'.$page.'Type';
         $em = $this->getDoctrine()->getManager();
@@ -587,11 +656,10 @@ class AdminController extends AbstractController
 
         if(!isset($entity[0])){
             $entity = new $classConst();
+            $entity->setPublished(false);
         }else{
             $entity = $entity[0];
         }
-
-        $entity->setPublished(true);
 
         $form = $this->createForm($formConst, $entity);
         $form->add('Save', SubmitType::class);
@@ -621,6 +689,8 @@ class AdminController extends AbstractController
      */
     public function generic_page(Request $request, $page)
     {
+        $this->denyAccessUnlessGranted('ROLE_REDACTOR');
+        
         $classConst = 'App\Entity\\'.$page;
         $em = $this->getDoctrine()->getManager();
         $repo = $em->getRepository($classConst);
@@ -647,6 +717,8 @@ class AdminController extends AbstractController
      */
     public function contenttypes()
     {
+        $this->denyAccessUnlessGranted('ROLE_EDITOR');
+        
         $entitiesCT = [];
         $entities = scandir('../src/Entity');
 
@@ -663,6 +735,8 @@ class AdminController extends AbstractController
     }
 
     public function list_contenttypes(){
+        $this->denyAccessUnlessGranted('ROLE_EDITOR');
+        
         $entitiesCT = [];
         $entities = scandir('../src/Entity');
 
@@ -683,6 +757,8 @@ class AdminController extends AbstractController
      */
     public function new_contenttype(ConsoleController $cC, KernelInterface $kernel)
     {
+        $this->denyAccessUnlessGranted('ROLE_EDITOR');
+        
         if(isset($_POST['entity_name']) && $_POST['entity_name'] != ''){
             $entity_name = 'CT'.ucfirst($_POST['entity_name']);
             $cC->createEntity($kernel, $entity_name);
@@ -698,6 +774,8 @@ class AdminController extends AbstractController
      */
     public function contenttype(Request $request, $ct)
     {
+        $this->denyAccessUnlessGranted('ROLE_EDITOR');
+        
         $em = $this->getDoctrine()->getManager();
         $repo = $em->getRepository('App\Entity\\'.$ct);
 
@@ -708,18 +786,24 @@ class AdminController extends AbstractController
             }
             switch($_POST['controls']){
                 case 'publish':
+                    $this->denyAccessUnlessGranted('ROLE_PUBLISHER');
+        
                     foreach($entitiesToUpdate as $entityToControl){
                         $entityToControl->setPublished(true);
                         $em->persist($entityToControl);
                     }
                     break;
                 case 'unpublish':
+                    $this->denyAccessUnlessGranted('ROLE_PUBLISHER');
+        
                     foreach($entitiesToUpdate as $entityToControl){
                         $entityToControl->setPublished(false);
                         $em->persist($entityToControl);
                     }
                     break;
                 case 'delete':
+                    $this->denyAccessUnlessGranted('ROLE_SUPERVISOR');
+        
                     foreach($entitiesToUpdate as $entityToControl){
                         $em->remove($entityToControl);
                     }
@@ -740,6 +824,8 @@ class AdminController extends AbstractController
      * @Route("/admin/contenttypes/delete/{ct}", name="admin_delete_contenttype")
      */
     public function delete_contenttype($ct, ConsoleController $cC, KernelInterface $kernel){
+        $this->denyAccessUnlessGranted('ROLE_SUPERVISOR');
+        
         $em = $this->getDoctrine()->getManager();
 
         $entitiesToDelete = $em->getRepository('App\Entity\\'.$ct)->findAll();
@@ -765,6 +851,8 @@ class AdminController extends AbstractController
      */
     public function fields_contenttype(Request $request, TaxonomyController $tC, ConsoleController $cC, KernelInterface $kernel, $contenttype)
     {
+        $this->denyAccessUnlessGranted('ROLE_REDACTOR');
+        
         $taxonomyGroups = [];
         $reflection = new \ReflectionClass($tC);
         $taxos = $reflection->getProperties(\ReflectionProperty::IS_PUBLIC);
@@ -833,6 +921,8 @@ class AdminController extends AbstractController
      */
     public function new_entry(Request $request, $ct, $id = null)
     {
+        $this->denyAccessUnlessGranted('ROLE_EDITOR');
+        
         $classConst = 'App\Entity\\'.$ct;
         $formConst = 'App\Form\\'.$ct.'Type';
         $em = $this->getDoctrine()->getManager();
@@ -840,7 +930,7 @@ class AdminController extends AbstractController
 
         if($id === null){
             $entity = new $classConst();
-            $entity->setPublished(true);
+            $entity->setPublished(false);
         }else{
             $entity = $repo->findOneById($id);
         }

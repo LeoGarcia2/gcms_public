@@ -6,6 +6,8 @@
 
 {% set idPage = 0 %}
 
+{% if is_granted('ROLE_REDACTOR') %}
+
 <form id="new" method="post" action="{{ path('admin_new_page') }}">
 
 	<input type="text" name="entity_name" placeholder="Page's name" required>
@@ -14,28 +16,55 @@
 
 </form>
 
+{% endif %}
+
 <hr>
 
 <form id="listing" method="post" action="{{ path('admin_pages') }}">
+	
+	{% if is_granted('ROLE_PUBLISHER') %}
 
-	<section id="controls">
-		<input type="radio" name="controls" id="publish" value="publish" checked>
-		<label for="publish">Publish</label>
-		<input type="radio" name="controls" id="unpublish" value="unpublish">
-		<label for="unpublish">Unpublish</label>
-		<input type="radio" name="controls" id="delete" value="delete">
-		<label for="delete">Delete</label>
-		<button type="submit">Execute</button>
-	</section>
+		<section id="controls">
 
-	<hr>
+			<input type="radio" name="controls" id="publish" value="publish" checked>
+			<label for="publish">Publish</label>
+			<input type="radio" name="controls" id="unpublish" value="unpublish">
+			<label for="unpublish">Unpublish</label>		
+			{% if is_granted('ROLE_SUPERVISOR') %}
+
+				<input type="radio" name="controls" id="delete" value="delete">
+				<label for="delete">Delete</label>
+
+			{% endif %}
+
+			<button type="submit">Execute</button>
+
+		</section>
+
+		<hr>
+		
+	{% endif %}
 	
 	{% for page in pages %}
 
 		<section class="page">
 
-			<p><input type="checkbox" name="pages[]" value="{{ pagesE[idPage] }}"></p>
-			<p><a href="{{ path('generic_form', { page: pagesE[idPage] }) }}">{{ page.displayName }}</a></p>
+			{% if is_granted('ROLE_PUBLISHER') %}
+
+				<p><input type="checkbox" name="pages[]" value="{{ pagesE[idPage] }}"></p>
+
+			{% endif %}
+
+			{% if (is_granted('ROLE_REDACTOR') and page.author == app.user.username) or is_granted('ROLE_SUPERVISOR') %}
+
+				<p><a href="{{ path('generic_form', { page: pagesE[idPage] }) }}">{{ page.displayName }}</a></p>
+
+			{% else %}
+
+				<p>{{ page.displayName }}</p>
+
+			{% endif %}
+
 			<p><a href="{{ path('generic_page', { page: pagesE[idPage] }) }}">Preview data</a></p>
 			<p>Created by {{ page.author }}</p>
 			<p>At {{ page.updatedAt|date('Y/m/d') }}</p>

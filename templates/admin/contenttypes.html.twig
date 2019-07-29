@@ -4,13 +4,17 @@
 
 <h1>Content types</h1>
 
-<form id="new" method="post" action="{{ path('admin_new_contenttype') }}">
+{% if is_granted('ROLE_REDACTOR') %}
 
-	<input type="text" name="entity_name" placeholder="Content type's name" required>
+	<form id="new" method="post" action="{{ path('admin_new_contenttype') }}">
 
-	<button type="submit" title="Create new content type"><i class="material-icons">fiber_new</i></button>
+		<input type="text" name="entity_name" placeholder="Content type's name" required>
 
-</form>
+		<button type="submit" title="Create new content type"><i class="material-icons">fiber_new</i></button>
+
+	</form>
+
+{% endif %}
 
 <hr>
 	
@@ -19,7 +23,12 @@
 	<section class="contenttype">
 
 		<p><a href="{{ path('admin_contenttype', { ct: ct}) }}">{{ ct }}</a></p>
-		<a href="{{ path('admin_delete_contenttype', { ct: ct }) }}">Delete</a>
+
+		{% if is_granted('ROLE_SUPERVISOR') %}
+
+			<a href="{{ path('admin_delete_contenttype', { ct: ct }) }}">Delete</a>
+			
+		{% endif %}
 		
 	</section>
 

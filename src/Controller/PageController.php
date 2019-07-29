@@ -8,5 +8,5 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 class PageController extends AbstractController
-{
+{
 }

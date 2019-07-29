@@ -16,8 +16,14 @@
 	</section>
 
 	<section>
-		<label for="password">User's password(*) : </label>
-		<input type="password" name="password" id="password" minlength="3" required>
+		{% if user_id == null %}
+			<label for="password">User's password(*) : </label>
+			<input type="password" name="password" id="password" minlength="3" required>
+		{% else %}
+			<label for="password">User's password (leave blank to keep old) : </label>
+			<input type="password" name="password" id="password" minlength="3">
+		{% endif %}
+			
 	</section>
 
 	<section>
@@ -32,6 +38,7 @@
 			</optgroup>
 			<optgroup label="Standalone roles">
 				<option value="ROLE_PUBLISHER" {% if "ROLE_PUBLISHER" in roles %}selected{% endif %}>Publisher</option>
+				<option value="ROLE_DEVELOPER" {% if "ROLE_DEVELOPER" in roles %}selected{% endif %}>Developer</option>
 			</optgroup>				
 		</select>
 	</section>

@@ -45,26 +45,64 @@
 		<section id="gcms_menu">
 			
 			<nav>
-				
-				<a href="{{ path('admin_pages') }}">Pages</a>
-				<section class="dropdown"><a href="{{ path('admin_contenttypes') }}">Entries</a> <span></span>
-					<section class="submenu">
-						{{ render(controller('App\\Controller\\AdminController::list_contenttypes')) }}
+
+				{% if is_granted('ROLE_REDACTOR') %}
+
+					<a href="{{ path('admin_pages') }}">Pages</a>
+
+				{% endif %}
+
+				{% if is_granted('ROLE_EDITOR') %}
+
+					<section class="dropdown"><a href="{{ path('admin_contenttypes') }}">Entries</a> <span></span>
+						<section class="submenu">
+							{{ render(controller('App\\Controller\\AdminController::list_contenttypes')) }}
+						</section>
 					</section>
-				</section>
-				<a href="{{ path('admin_components') }}">Components</a>
+
+				{% endif %}
+
+				{% if is_granted('ROLE_DEVELOPER') %}
+
+					<a href="{{ path('admin_components') }}">Components</a>
+
+				{% endif %}
+
 				<hr>
-				<section class="dropdown">Config <span></span>
-					<section class="submenu">
-						<a href="{{ path('admin_routes') }}">Routes</a>
-						<a href="{{ path('admin_taxonomy') }}">Taxonomy</a>
-						<a href="{{ path('admin_cacheclear', { lastRoute: app.request.get('_route') }) }}">Clear cache</a>
-						<a href="{{ path('admin_logs') }}">Logs</a>
-						<a href="{{ path('admin_siteconf') }}">Edit site's config</a>
-						<a href="{{ path('admin_database') }}">Edit database's config</a>
+
+				{% if is_granted('ROLE_MANAGER') %}
+
+					<section class="dropdown">Config <span></span>
+						<section class="submenu">
+							<a href="{{ path('admin_routes') }}">Routes</a>
+							<a href="{{ path('admin_taxonomy') }}">Taxonomy</a>
+							<a href="{{ path('admin_cacheclear', { lastRoute: app.request.get('_route') }) }}">Clear cache</a>
+							<a href="{{ path('admin_logs') }}">Logs</a>
+
+							{% if is_granted('ROLE_ADMIN') %}
+
+								<a href="{{ path('admin_siteconf') }}">Edit site's config</a>
+								<a href="{{ path('admin_database') }}">Edit database's config</a>
+
+							{% endif %}
+
+						</section>
 					</section>
-				</section>
-				<a href="{{ path('admin_files') }}">Files</a>
+
+				{% endif %}
+
+				{% if is_granted('ROLE_MANAGER') %}
+
+					<a href="{{ path('admin_files') }}">Files</a>
+
+				{% endif %}
+
+				{% if is_granted('ROLE_ADMIN') %}
+
+					<a href="{{ path('admin_users') }}">Users</a>
+
+				{% endif %}
+				
 				<a href="{{ path('admin_doc') }}">Documentation</a>
 
 			</nav>
