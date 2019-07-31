@@ -2,6 +2,12 @@
 
 ## Things to know
 
+To start a project with GCMS, go to :
+
+*   https://mydomain/install for a production server.
+*   https://localhost:8000/install for a Symfony 4 Built-in server.
+*   http://localhost/gcms/install for an apache server (with .htaccess to shorten the URLs and get rid of the index.php).
+
 GCMS is a Symfony 4 installation with some GUI for content managers and developers, so if you can do something with Symfony, you can do it with GCMS by coding directly within the source. It also means that you can extend/modify the behavior of the backoffice by yourself.
 
 ## Table of contents
@@ -125,7 +131,7 @@ In order to deploy your application you must have set a homepage URL for one pag
 
 *   https://mydomain/ for a production server.
 *   https://localhost:8000/ for a Symfony 4 Built-in server.
-*   http://localhost/gcms/ for an apache server.
+*   http://localhost/gcms/ for an apache server (with .htaccess to shorten the URLs and get rid of the index.php).
 
 Then, it's up to you to make the linking between your pages directly within the "templates/theme/" folder. See the routes' and components' tabs to learn how to make these links.
 
